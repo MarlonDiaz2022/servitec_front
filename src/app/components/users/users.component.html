@@ -1,0 +1,73 @@
+<div class="row" style="min-height: 100vh; overflow-y: auto;">
+  <div class="col-md-4 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #3498db, #2980b9); border-top-right-radius: 20px; border-bottom-right-radius: 20px;">
+     <div *ngIf="showForm" class="text-center text-white">
+         <h5>{{ editinguser ? 'Editar Herramienta' : 'Crear Nueva Herramienta' }}</h5>
+         </div>
+     <div *ngIf="!selecteduser && !showForm" class="text-center text-white">
+        <h5>Herramientas</h5>
+        </div>
+  </div>
+<!-- esta seccion corresponde a la tabla de herramientas -->
+
+  <div class="col-md-8 p-4"> <div *ngIf="!showForm">
+      <h2>Lista de usuarios Activos</h2> 
+      <button class="btn btn-success mb-3" (click)="addNewTool()">
+          <i class="material-icons">add</i> crear Usuario
+      </button>
+      <table class="table table-striped ">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>cedula</th>
+            <th>telefono</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of usersService.usersArray">
+            <td>{{ user.name }}</td>
+            <td>{{ user.cedula }}</td>
+            <td>{{ user.phone }}</td>
+
+              <button class="btn btn-warning btn-sm mr-2" (click)="editUser(user.cedula)" title="editar usuario"><i class="material-icons" style="font-size:20px;">edit</i> </button>
+              <button class="btn btn-danger btn-sm" (click)="golist()" title="listado herramientas"><i class="material-icons" style="font-size:20px;">list</i></button>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+ <!--esta parte es el formulario tanto para crear y editar--> 
+    <div *ngIf="showForm">
+      <h2>{{ editinguser ? 'Editar Herramienta' : 'Crear Nueva Herramienta' }}</h2>
+      <form (ngSubmit)="saveuser()"> <div class="form-group mb-3"> <label for="formId">ID</label>
+          <input type="text" class="form-control" id="formId" name="id" [value]="userForm.cedula" disabled>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="formName">Nombre</label>
+            <input type="text" class="form-control" id="formName" name="name" required [(ngModel)]="userForm.name">
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="formModel">Cedula</label>
+            <input type="text" class="form-control" id="formBrand" name="brand" required [(ngModel)]="userForm.cedula">
+          </div>
+          
+          <div class="form-group mb-3">
+            <label for="formModel">Telefono</label>
+            <input type="text" class="form-control" id="formModel" name="model" required [(ngModel)]="userForm.phone">
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="formModel">contraseña</label>
+            <input type="text" class="form-control" id="formModel" name="model" required [(ngModel)]="userForm.password">
+          </div>
+     
+    <button type="submit" class="btn btn-primary mt-3">
+            <i class="material-icons">save</i> {{ editinguser ? 'Guardar Cambios' : 'Crear Herramienta' }}
+    </button>
+
+    <button type="button" class="btn btn-secondary mt-3 ms-2" (click)="cancelForm()">
+             <i class="material-icons">cancel</i> Cancelar
+    </button>
+    </form>
+
+</div>

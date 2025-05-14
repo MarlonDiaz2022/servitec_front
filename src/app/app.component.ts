@@ -1,12 +1,24 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterModule } from '@angular/router'; 
+import { Route } from '@angular/router'; 
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
+import { ToolComponent } from './components/tools/tool.component';
+import { MaintenanceComponent } from './components/Maintenances/maintenance.component';
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true, 
+  imports: [
+  CommonModule,
+  FormsModule,
+  RouterModule
+],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'frontend';
+
 }
