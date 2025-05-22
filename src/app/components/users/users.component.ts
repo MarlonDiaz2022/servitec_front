@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
-
 @Component({
   selector: 'app-tool',
   imports: [CommonModule, FormsModule, HttpClientModule],
@@ -13,25 +12,25 @@ import { HttpClientModule } from '@angular/common/http';
 })
 
 export class UsersComponent implements OnInit {
-
   showForm: boolean = false;
   editinguser: boolean = false;
   userForm: any = {};
   selecteduser: any = null;
+  toolsOfUser: any[] = [];
+  modalTool: any = null;
 
   constructor(public usersService: UsersService) {}
 
   ngOnInit(): void {
-      this.usersService.fetchUsers();
+    this.usersService.fetchUsers();
   }
 
   // ... (otros métodos como details, goMaintenance, deleteTool) ...
 
-  detailstool(user: any){
-    console.log('detailstool llamado con herramienta:', user)
+  detailstool(user: any) {
+    console.log('detailstool llamado con herramienta:', user);
     this.selecteduser = user;
   }
-  
 
   // Inicia el proceso para añadir una nueva herramienta
   addNewTool(): void {
@@ -47,9 +46,15 @@ export class UsersComponent implements OnInit {
   }
 
   // Inicia el proceso para editar una herramienta existente
-  editUser(tool: any): void {
+  editUser(user: any): void {
     this.editinguser = true;
-    this.userForm= { id: tool.id || tool._id, ...tool };
+    this.userForm = {
+      _id: user._id,
+      name: user.name,
+      cedula: user.cedula,
+      phone: user.phone,
+    };
+
     this.showForm = true;
     this.selecteduser = null;
   }
@@ -67,26 +72,27 @@ export class UsersComponent implements OnInit {
     const formData = new FormData();
 
     for (const key in this.userForm) {
-        // No añadimos 'imageUrl' del objeto toolForm aquí porque el archivo se maneja aparte
-        // A menos que estemos editando y NO se seleccione un nuevo archivo, en cuyo caso
-        // el backend necesita saber la URL existente. La forma de manejar esto depende del backend.
-        // Una opción común es enviar la 'imageUrl' existente si no hay 'selectedFile'.
-        if (this.userForm.hasOwnProperty(key)) {
-             if (key === 'operating' || key === 'maintenance') {
-                 formData.append(key, this.userForm[key] ? 'true' : 'false');
-             } else {
-                 formData.append(key, this.userForm[key]);
-             }
+      if (this.userForm.hasOwnProperty(key)) {
+        if (key === 'operating' || key === 'maintenance') {
+          formData.append(key, this.userForm[key] ? 'true' : 'false');
+        } else {
+          formData.append(key, this.userForm[key]);
         }
+      }
     }
- 
+
     let saveOperation;
     if (this.editinguser) {
-      // Asegúrate de que tu API soporta PUT/PATCH a /tools/:id con FormData
-      saveOperation = this.usersService.updateUsers(this.userForm.cedula, formData);
+      if (this.editinguser) {
+        saveOperation = this.usersService.updateUsers(
+          this.userForm._id,
+          this.userForm,
+        ); // usa _id aquí
+      } else {
+        saveOperation = this.usersService.createUsers(this.userForm);
+      }
     } else {
-      // Asegúrate de que tu API soporta POST a /tools con FormData
-      saveOperation = this.usersService.createUsers(formData);
+      saveOperation = this.usersService.createUsers(this.userForm);
     }
 
     saveOperation.subscribe(
@@ -99,13 +105,40 @@ export class UsersComponent implements OnInit {
       (error: any) => {
         console.error('Error al guardar herramienta', error);
         // Puedes mostrar un mensaje de error al usuario aquí
-        alert('Error al guardar herramienta: ' + (error.error?.message || error.message));
-      }
+        alert('Error al guardar : ' + (error.error?.message || error.message));
+      },
     );
   }
 
-  golist(){
-    
+  golist(user: any): void {
+    const cedula = user.cedula;
+    this.usersService.getToolsByCedula(cedula).subscribe({
+      next: (tools: any[]) => {
+        console.log('Herramientas del usuario:', tools);
+        this.toolsOfUser = tools; // <--- Aquí se guarda la lista
+        this.selecteduser = user;
+      },
+      error: (err) => {
+        console.error('Error al obtener herramientas:', err);
+        alert(
+          'No se pudieron obtener las herramientas: ' +
+            (err.error?.message || err.message),
+        );
+      },
+    });
   }
+  openModal(user: any): void {
+    this.selecteduser = user;
+    this.golist(user); // carga herramientas
 
+    setTimeout(() => {
+      const modalEl = document.getElementById('modalAssignedTool');
+      if (modalEl) {
+        const modal = new (window as any).bootstrap.Modal(modalEl);
+        modal.show();
+      } else {
+        console.error('Modal no encontrado');
+      }
+    }, 200); // Espera más tiempo si necesitas asegurar el render
+  }
 }

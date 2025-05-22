@@ -1,9 +1,15 @@
 
 import { toolInterface } from "./tools";
-import {}
+import { usersInterface } from "./users";
 
-export interface maintenancesInterface{
+export interface assignmentInterface{
 
-
+_id: string;
+tool: toolInterface; 
+worker: usersInterface;
+place:string;
+date_of_loan:Date;
+delivery_date:Date
+status:boolean;
 
 }

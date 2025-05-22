@@ -33,6 +33,7 @@ export class maintenancesService {
       (err) => console.error('Error al cargar herramientas:', err)
     );
   }
+  
 
   // --- Nuevos métodos para interactuar con la API (CRUD) ---
 
@@ -46,21 +47,9 @@ export class maintenancesService {
   // Método para actualizar una herramienta existente
   // Espera el ID de la herramienta y un objeto FormData con los datos actualizados
 
-  updatemaintenance(id: string, formData: FormData): Observable<maintenanceInterface> {
-  
-    return this.http.put<maintenanceInterface>(`${this.url_api}/${id}`, formData).pipe(
-  
-      tap((updatedmaintenance) => {
-        console.log('Herramienta actualizada en el backend:', updatedmaintenance);
-        
-    const index = this.maintenancesArray.findIndex(maintenances => maintenances.toolID === updatedmaintenance.toolID);
-        if (index !== -1) {
-          this.maintenancesArray[index] =updatedmaintenance;
-        }
-        
-      })
-    );
-  }
+ updatemaintenance(id: string, data: any): Observable<maintenanceInterface> {
+  return this.http.put<maintenanceInterface>(`${this.url_api}/${id}`, data);
+}
 
   // Método para eliminar una herramienta
   deletemaintenance(id: string): Observable<any> {

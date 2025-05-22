@@ -1,30 +1,223 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common'; // 👈 importar CommonModule
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { assignmentService } from '../../Services/assignment.service';
 import { ToolService } from '../../Services/tool.service';
-import { maintenanceInterface } from '../../models/maintenance';
+import { UsersService } from '../../Services/users.service';
+import { usersInterface } from '../../models/users';
 import { toolInterface } from '../../models/tools';
-import { CommonModule } from '@angular/common'; // A menudo necesario para *ngFor en standalone
-import { FormsModule } from '@angular/forms'; // Necesario para [(ngModel)]
 
 @Component({
-  selector: 'app-maintenance', // Asegúrate de que este sea el selector correcto
-  standalone: true,             // <-- Verifica que sea true
-  imports: [
-    CommonModule,
-    FormsModule],
-  templateUrl: './assignment.component.html', // <-- Este es el HTML que me mostraste
+  selector: 'app-tool',
+  imports: [CommonModule, FormsModule, HttpClientModule],
+  standalone: true,
+  templateUrl: './assignment.component.html',
+  styleUrl: './assignment.component.css',
 })
-
 export class assignmentComponent implements OnInit {
+  showForm: boolean = false;
+  editingAsing: boolean = false;
+  asignForm: any = {};
+  selectedFile: File | null = null;
+  selectedAsign: any = null;
+  workers: any[] = [];
+  tools: any[] = [];
+  filteredWorkers: any[] = [];
+  filteredTools: any[] = [];
 
+  searchWorker: string = '';
+  searchTool: string = '';
 
-     maintenances: maintenanceInterface[] = [];
-      selectedTool: toolInterface | null = null;
-      constructor(
-       
-      ) {}
-    
-      ngOnInit(): void {
-        
+  selectedWorker: any = null;
+  selectedTool: any = null;
+
+  constructor(
+    public asignservice: assignmentService,
+    private workerService: UsersService,
+    private toolsService: ToolService,
+  ) {}
+
+  ngOnInit(): void {
+    this.asignservice.fetchAsign();
+    this.workerService.fetchUsers();
+    this.toolsService.fetchtools();
+  }
+
+  filterWorkers() {
+    const search = this.searchWorker.toLowerCase();
+    this.filteredWorkers = this.workers.filter(
+      (worker) =>
+        worker.name.toLowerCase().includes(search) ||
+        worker.cedula.toString().includes(search),
+    );
+  }
+
+  filterTools() {
+    const search = this.searchTool.toLowerCase();
+    this.filteredTools = this.tools.filter(
+      (tool) =>
+        tool.name.toLowerCase().includes(search) ||
+        tool.code.toLowerCase().includes(search) ||
+        tool.serial?.toLowerCase().includes(search),
+    );
+  }
+
+  detailstool(tool: any) {
+    console.log('detailstool llamado con herramienta:', tool);
+    this.selectedAsign = tool;
+  }
+
+  mostrarFormulario() {
+    this.filteredTools = this.toolsService.fetchtools();
+    this.filteredWorkers = this.workerService.fetchUsers();
+
+    this.showForm = true;
+    setTimeout(() => {
+      const formEl = document.getElementById('formContainer');
+      if (formEl) {
+        formEl.scrollIntoView({ behavior: 'smooth' });
       }
-    
+    }, 0);
+  }
+
+  volverAtras() {
+    this.showForm = false;
+  }
+
+  createAsign(): void {
+    let finalWorker: usersInterface | null = this.selectedWorker; // Asume que el usuario seleccionó del dropdown
+    let finalTool: toolInterface | null = this.selectedTool; // Asume que el usuario seleccionó del dropdown
+
+    if (!finalWorker && this.searchWorker) {
+      const search = this.searchWorker.trim().toLowerCase();
+      finalWorker = this.workers.find(
+        (w) =>
+          w.cedula.toString() === search ||
+          w.name.toLowerCase() === search
+      );
+    }
+
+    if (!finalTool && this.searchTool) {
+      const search = this.searchTool.trim().toLowerCase();
+      finalTool = this.tools.find(
+        (t) =>
+          t.code.toLowerCase() === search ||
+          (t.serial && t.serial.toLowerCase() === search) ||
+          t.name.toLowerCase() === search
+      );
+    }
+
+    console.log('selectedWorker:', finalTool, finalWorker);
+
+    if (!finalWorker || !finalTool) {
+      alert(
+        'Debes ingresar o seleccionar un trabajador y una herramienta válidos.',
+      );
+      return;
+    }
+
+    const payload = {
+      workerId: finalWorker._id,
+      toolId: finalTool._id,
+      place: this.asignForm.place,
+      date_of_loan: this.asignForm.date_of_loan,
+      delivery_date: this.asignForm.delivery_date,
+      status: this.asignForm.status,
+    };
+
+    this.asignservice.createasign(payload).subscribe({
+      next: (res) => {
+        alert('Asignación creada con éxito');
+        this.asignservice.fetchAsign();
+        this.resetForm();
+      },
+      error: (err) => {
+        console.error('Error al crear asignación:', err);
+        console.log('info', payload);
+        alert('Error al crear la asignación. Revisa la consola.');
+      },
+    });
+  }
+
+  resetForm() {
+    this.asignForm = {
+      place: '',
+      date_of_loan: '',
+      delivery_date: '',
+      status: 'Activa',
+    };
+
+    this.selectedWorker = null;
+    this.selectedTool = null;
+    this.searchWorker = '';
+    this.searchTool = '';
+    this.filteredWorkers = this.workers;
+    this.filteredTools = this.tools;
+
+    this.selectedAsign = null;
+  }
+
+  editAsign(user: any): void {
+    this.editingAsing = true;
+    this.asignForm = {
+      _id: user._id,
+      name: user.name,
+      cedula: user.cedula,
+      phone: user.phone,
+    };
+
+    this.showForm = true;
+    this.selectedAsign = null;
+  }
+
+  // Cancela la operación del formulario
+  cancelForm(): void {
+    this.showForm = false;
+    this.asignForm = {};
+  }
+
+  saveAsign(): void {
+    console.log('Datos del formulario a enviar:', this.asignForm);
+
+    const formData = new FormData();
+
+    for (const key in this.asignForm) {
+      if (this.asignForm.hasOwnProperty(key)) {
+        if (key === 'operating' || key === 'maintenance') {
+          formData.append(key, this.asignForm[key] ? 'true' : 'false');
+        } else {
+          formData.append(key, this.asignForm[key]);
+        }
+      }
+    }
+
+    let saveOperation;
+    if (this.editingAsing) {
+      if (this.editingAsing) {
+        saveOperation = this.asignservice.updateasign(
+          this.asignForm._id,
+          this.asignForm,
+        ); // usa _id aquí
+      } else {
+        saveOperation = this.asignservice.createasign(this.asignForm);
+      }
+    } else {
+      saveOperation = this.asignservice.createasign(this.asignForm);
+    }
+
+    saveOperation.subscribe(
+      (response: any) => {
+        console.log('Herramienta guardada con éxito', response);
+        this.showForm = false;
+        this.asignForm = {};
+        this.asignservice.fetchAsign();
+      },
+      (error: any) => {
+        console.error('Error al guardar herramienta', error);
+        // Puedes mostrar un mensaje de error al usuario aquí
+        alert('Error al guardar : ' + (error.error?.message || error.message));
+      },
+    );
+  }
 }

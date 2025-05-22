@@ -21,17 +21,17 @@ export class ToolService {
   gettools(): Observable<toolInterface[]> {
     return this.http.get<toolInterface[]>(this.url_api);
   }
-
-  // Método para cargar las herramientas de la API y almacenarlas en arreglotool
  
-  fetchtools(): void {
+  fetchtools(): any[] {
     this.gettools().subscribe(
       (tools) => {
         this.toolArray = tools;
         console.log('Herramientas cargadas:', this.toolArray);
+        return this.toolArray;
       },
       (err) => console.error('Error al cargar herramientas:', err)
     );
+    return this.toolArray;
   }
 
   // --- Nuevos métodos para interactuar con la API (CRUD) ---

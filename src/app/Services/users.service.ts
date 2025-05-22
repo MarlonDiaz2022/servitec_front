@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators'; // Importamos tap para operaciones secundarias como refrescar la lista
+import { tap } from 'rxjs/operators'; 
 import { usersInterface } from '../models/users';
 
 @Injectable({
@@ -13,24 +13,25 @@ export class UsersService {
   url_api = 'http://localhost:3000/users';
 
   usersArray: usersInterface[] = [];
+  toolsOfUser: any[] = [];
 
   constructor(private http: HttpClient) {}
 
 
-  gettools(): Observable<usersInterface[]> {
+  getusers(): Observable<usersInterface[]> {
     return this.http.get<usersInterface[]>(this.url_api);
   }
 
-  // Método para cargar las herramientas de la API y almacenarlas en arreglotool
- 
-  fetchUsers(): void {
-    this.gettools().subscribe(
-      (tools) => {
-        this.usersArray = tools;
+  fetchUsers(): any[] {
+    this.getusers().subscribe(
+      (users) => {
+        this.usersArray = users;
         console.log('usuarios cargados:', this.usersArray);
+        return this.usersArray;
       },
       (err) => console.error('Error al cargar:', err)
     );
+    return this.usersArray;
   }
 
   // --- Nuevos métodos para interactuar con la API (CRUD) ---
@@ -50,9 +51,9 @@ export class UsersService {
   // Método para actualizar una herramienta existente
   // Espera el ID de la herramienta y un objeto FormData con los datos actualizados
 
-  updateUsers(id: string, formData: FormData): Observable<usersInterface> {
+  updateUsers(id: string, data: any): Observable<usersInterface> {
    
-    return this.http.put<usersInterface>(`${this.url_api}/${id}`, formData).pipe(
+    return this.http.put<usersInterface>(`${this.url_api}/${id}`, data).pipe(
       
       tap((updatedUser) => {
         console.log('Herramienta actualizada en el backend:', updatedUser);
@@ -73,7 +74,7 @@ export class UsersService {
         console.log(`Herramienta con ID ${id} eliminada en el backend`);
         // Elimina la herramienta del array local
         this.usersArray = this.usersArray.filter(users => users.cedula !== id);
-        
+        this.fetchUsers();
       })
     );
   }
@@ -86,5 +87,9 @@ export class UsersService {
     console.log(`Buscando herramienta con ID ${cedula} en cache local.`);
     return this.usersArray.find(user => user.cedula === cedula);
   }
+
+getToolsByCedula(cedula: string) {
+  return this.http.get<any[]>(`http://localhost:3000/users/listTool/${cedula}`);
+}
 
 }

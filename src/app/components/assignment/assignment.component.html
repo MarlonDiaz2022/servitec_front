@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignación de Herramientas</title>
+    
+</head>
+
+<body>
+    <h1>Asignación de Herramientas</h1>
+
+    <!-- Todo el contenido principal solo se muestra si showForm es false -->
+    <div *ngIf="!showForm">
+        <div class="actions">
+            <button type="button" class="btn btn-primary mt-3" (click)="mostrarFormulario()">
+                <i class="material-icons" style="font-size: 20px;">add</i> crear asignacion
+            </button>
+        </div>
+
+        <div class="filters">
+            <input type="text" placeholder="Buscar persona">
+            <input type="text" placeholder="Buscar herramienta">
+            <input type="text" placeholder="Estado">
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Trabajador</th>
+                    <th>Herramienta</th>
+                    <th>codigo herramienta</th>
+                    <th>Lugar</th>
+                    <th>Fecha Entrega</th>
+                    <th>Fecha Regreso</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let asign of asignservice.assignmentArray">
+                    <td>{{ asign.worker.name }}</td>
+                    <td>{{ asign.tool.name }}</td>
+                    <td>{{ asign.tool.code }}</td>
+                    <td>{{ asign.place }}</td>
+                    <td>{{ asign.date_of_loan | date:'yyyy-MM-dd' }}</td>
+                    <td>{{ asign.delivery_date | date:'yyyy-MM-dd' }}</td>
+                    <td>{{ asign.status ? 'Activo' : 'Inactivo' }}</td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="Acciones de usuario">
+                            <button class="btn btn-warning btn-sm" title="editar asignacion">
+                                <i class="material-icons" style="font-size: 18px;">edit</i>
+                            </button>
+                            <button class="btn btn-info btn-sm" title="ver herramienta" data-bs-toggle="modal"
+                                data-bs-target="#modalAssignedTool">
+                                <i class="material-icons" style="font-size: 18px;">list</i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- El formulario solo se muestra si showForm es true -->
+    <div *ngIf="showForm" id="formContainer">
+        <button class="btn btn-secondary mb-3" (click)="volverAtras()">← Volver</button>
+        <form (ngSubmit)="createAsign()" class="assignment-form">
+            <h3>Crear Asignación</h3>
+
+            <!-- Trabajador -->
+            <label for="worker">Trabajador</label>
+            <input type="text" class="form-control" [(ngModel)]="searchWorker" name="searchWorker"
+                placeholder="ingrese cédula o nombre" (input)="filterWorkers()" />
+
+            <select class="form-select mt-2" [(ngModel)]="selectedWorker" name="selectedWorker" required>
+                <option *ngFor="let worker of filteredWorkers" [ngValue]="worker">
+                    {{ worker.name }} - {{ worker.cedula }}
+                </option>
+            </select>
+
+            <!-- Herramienta -->
+            <label for="tool" class="mt-3">Herramienta</label>
+            <input type="text" class="form-control" [(ngModel)]="searchTool" name="searchTool"
+                placeholder="ingreso código, serial o nombre" (input)="filterTools()" />
+
+            <select class="form-select mt-2" [(ngModel)]="selectedTool" name="selectedTool" required>
+                <option *ngFor="let tool of filteredTools" [ngValue]="tool">
+                    {{ tool.name }} - {{ tool.code }}
+                </option>
+            </select>
+
+            <!-- Lugar -->
+            <label for="place" class="mt-3">Lugar</label>
+            <input type="text" class="form-control" [(ngModel)]="asignForm.place" name="place" required />
+
+            <!-- Fecha de préstamo -->
+            <label for="date_of_loan" class="mt-3">Fecha de préstamo</label>
+            <input type="date" class="form-control" [(ngModel)]="asignForm.date_of_loan" name="date_of_loan" required />
+
+            <!-- Estado -->
+            <label for="status" class="mt-3">Estado</label>
+            <select class="form-select" [(ngModel)]="asignForm.status" name="status" required>
+                <option value=true>Activa</option>
+                <option value=false>Finalizada</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary mt-3">Crear Asignación</button>
+        </form>
+    </div>
+
+</body>
+
+</html>

@@ -5,7 +5,7 @@
     <div class="form-group">
       <label for="tool">Seleccionar herramienta:</label>
       <select [(ngModel)]="selectedToolId" id="tool" class="form-control">
-        <option [value]="''" disabled selected>-- Selecciona una herramienta --</option>
+        <option [ngValue]="''" disabled>-- Selecciona una herramienta --</option>
         <option *ngFor="let tool of tools" [value]="tool._id">
           {{ tool.name }} ({{ tool.code }})
         </option>
@@ -14,13 +14,8 @@
 
     <div class="form-group">
       <label for="comment">Comentarios:</label>
-      <textarea
-        [(ngModel)]="comment"
-        id="comment"
-        class="form-control"
-        rows="3"
-        placeholder="Escribe un comentario..."
-      ></textarea>
+      <textarea [(ngModel)]="comment" id="comment" class="form-control" rows="3"
+        placeholder="Escribe un comentario..."></textarea>
     </div>
 
     <div class="form-actions">
@@ -39,66 +34,83 @@
         <th>Herramienta</th>
         <th>codido</th>
         <th>Comentario</th>
-        <th>imagen</th>
+        <th>fecha</th>
+
       </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let mant of maintenances">
-      <td>{{ mant.toolID.name }}</td>   <td>{{ mant.toolID.code }}</td>   <td>{{ mant.comment }}</td>     <td>
-        <button
-          type="button"
-          class="btn btn-info btn-sm mr-2"
-          data-bs-toggle="modal"
-          data-bs-target="#modalToolDetails"
-          (click)="detailstool(mant.toolID)"  title="ver detalles"
-        >
-          <i class="material-icons" style="font-size: 20px;">details</i>
-        </button>
+      <tr *ngFor="let mant of maintenances">
+        <td>{{ mant.toolID.name }}</td>
+        <td>{{ mant.toolID.code }}</td>
+        <td>{{ mant.comment }}</td>
+        <td>{{ mant.createdAt | date:'yyyy-MM-dd'  }}</td>
+        <td>
 
-        <button
-          class="btn btn-warning btn-sm mr-2"
-          (click)="editMain(mant)"  title="editar mantenimiento"
-         >
-           <i class="material-icons" style="font-size: 20px;">edit</i>
-         </button>
+          <button type="button" class="btn btn-info btn-sm mr-2" data-bs-toggle="modal"
+            data-bs-target="#modalToolDetails" (click)="detailstool(mant.toolID)" title="ver detalles">
+            <i class="material-icons" style="font-size: 20px;">details</i>
+          </button>
 
-         </td> </tr>
-  </tbody>
+          <button class="btn btn-warning btn-sm mr-2" (click)="editMain(mant)" title="editar mantenimiento">
+            <i class="material-icons" style="font-size: 20px;">edit</i>
+          </button>
+
+        </td>
+      </tr>
+    </tbody>
   </table>
 
-  <div class="modal fade" id="modalToolDetails" tabindex="-1" aria-labelledby="modalToolDetailsLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modalToolDetailsLabel">Detalles de la Herramienta: {{ selectedTool?.name }}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div *ngIf="selectedTool" class="container-fluid">
-                <div class="row">
-                  <div class="col-md-4">
-                    <img [src]="'http://localhost:3000' + selectedTool.imageUrl"
-                         class="img-fluid"
-                         [alt]="'Imagen de ' + selectedTool.name"> </div>
-                  <div class="col-md-8">
-                    <p><strong>Nombre:</strong> {{ selectedTool.name }}</p>
-                    <p><strong>Marca:</strong> {{ selectedTool.brand }}</p>
-                    <p><strong>Modelo:</strong> {{ selectedTool.model }}</p>
-                    <p><strong>Código:</strong> {{ selectedTool.code }}</p>
-                    <p><strong>Serial:</strong> {{ selectedTool.serial }}</p>
-                    <p><strong>Cantidad:</strong> {{ selectedTool.amount }}</p>
-                    <p><strong>Estado:</strong> {{ selectedTool.operating ? 'Buen estado' : 'Inactivo' }}</p>
-                     <p><strong>En Mantenimiento:</strong> {{ selectedTool.maintenance ? 'Sí' : 'No' }}</p>
-                    </div>
-                </div>
+  <div class="container" *ngIf="viewMode === 'edit' && selectedMaintenance">
+    <h2 class="title">Editar Comentario de {{selectedMaintenance.toolID.name}}</h2>
+    <form (ngSubmit)="saveMant()">
+      <div class="form-group mb-3">
+        <label for="formComment">Comentario</label>
+        <input type="text" class="form-control" id="formComment" name="comment" [(ngModel)]="mantForm.comment">
+      </div>
+      <button type="submit" class="btn btn-primary" (click)="saveMant()">Guardar Cambios</button>
+      <button type="button" class="btn btn-secondary ms-2" (click)="cancelEdit()">Cancelar</button>
+    </form>
+  </div>
+
+
+
+  <div class="modal fade" id="modalToolDetails" tabindex="-1" aria-labelledby="modalToolDetailsLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalToolDetailsLabel">Detalles de la Herramienta: {{ selectedTool?.name }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="selectedTool" class="container-fluid">
+            <div class="row">
+              <div class="col-md-4">
+                <img [src]="'http://localhost:3000' + selectedTool.imageUrl" class="img-fluid"
+                  [alt]="'Imagen de ' + selectedTool.name">
               </div>
-               <div *ngIf="!selectedTool">
-                   <p>Cargando detalles de la herramienta...</p>
-               </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <div class="col-md-8">
+                <p><strong>Nombre:</strong> {{ selectedTool.name }}</p>
+                <p><strong>Marca:</strong> {{ selectedTool.brand }}</p>
+                <p><strong>Modelo:</strong> {{ selectedTool.model }}</p>
+                <p><strong>Código:</strong> {{ selectedTool.code }}</p>
+                <p><strong>Serial:</strong> {{ selectedTool.serial }}</p>
+                <p><strong>Cantidad:</strong> {{ selectedTool.amount }}</p>
+                <p><strong>Estado:</strong> {{ selectedTool.operating ? 'Buen estado' : 'Inactivo' }}</p>
+                <p><strong>En Mantenimiento:</strong> {{ selectedTool.maintenance ? 'Sí' : 'No' }}</p>
+              </div>
             </div>
           </div>
+          <div *ngIf="!selectedTool">
+            <p>Cargando detalles de la herramienta...</p>
+          </div>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 </div>
