@@ -86,27 +86,14 @@ export class assignmentComponent implements OnInit {
   }
 
   createAsign(): void {
-    let finalWorker: usersInterface | null = this.selectedWorker; // Asume que el usuario seleccionó del dropdown
-    let finalTool: toolInterface | null = this.selectedTool; // Asume que el usuario seleccionó del dropdown
 
-    if (!finalWorker && this.searchWorker) {
-      const search = this.searchWorker.trim().toLowerCase();
-      finalWorker = this.workers.find(
-        (w) =>
-          w.cedula.toString() === search ||
-          w.name.toLowerCase() === search
-      );
-    }
+    const tool: toolInterface = {_id: this.searchTool};
 
-    if (!finalTool && this.searchTool) {
-      const search = this.searchTool.trim().toLowerCase();
-      finalTool = this.tools.find(
-        (t) =>
-          t.code.toLowerCase() === search ||
-          (t.serial && t.serial.toLowerCase() === search) ||
-          t.name.toLowerCase() === search
-      );
-    }
+    debugger;
+    let finalWorker: usersInterface | null = this.selectedWorker ? this.selectedWorker : this.searchWorker // Asume que el usuario seleccionó del dropdown
+    let finalTool: toolInterface | null = this.selectedTool ? this.selectedTool : tool; // Asume que el usuario seleccionó del dropdown
+
+
 
     console.log('selectedWorker:', finalTool, finalWorker);
 
@@ -118,13 +105,14 @@ export class assignmentComponent implements OnInit {
     }
 
     const payload = {
-      workerId: finalWorker._id,
+      workerId: finalWorker,
       toolId: finalTool._id,
       place: this.asignForm.place,
       date_of_loan: this.asignForm.date_of_loan,
       delivery_date: this.asignForm.delivery_date,
       status: this.asignForm.status,
     };
+debugger;
 
     this.asignservice.createasign(payload).subscribe({
       next: (res) => {
