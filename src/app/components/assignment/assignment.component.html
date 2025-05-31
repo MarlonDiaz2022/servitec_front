@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asignación de Herramientas</title>
-    
+
 </head>
 
 <body>
@@ -20,9 +20,7 @@
         </div>
 
         <div class="filters">
-            <input type="text" placeholder="Buscar persona">
-            <input type="text" placeholder="Buscar herramienta">
-            <input type="text" placeholder="Estado">
+
         </div>
 
         <table>
@@ -46,15 +44,23 @@
                     <td>{{ asign.place }}</td>
                     <td>{{ asign.date_of_loan | date:'yyyy-MM-dd' }}</td>
                     <td>{{ asign.delivery_date | date:'yyyy-MM-dd' }}</td>
-                    <td>{{ asign.status ? 'Activo' : 'Inactivo' }}</td>
+                    <td>
+                        <span [ngClass]="{'status-active': asign.status, 'status-inactive': !asign.status}">
+                            {{ asign.status ? 'activo' : 'Inactivo' }}
+                        </span>
+                    </td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Acciones de usuario">
-                            <button class="btn btn-warning btn-sm" title="editar asignacion">
+                            <button class="btn btn-warning btn-sm" (click)=editAsign(asign) title="editar asignacion">
                                 <i class="material-icons" style="font-size: 18px;">edit</i>
                             </button>
                             <button class="btn btn-info btn-sm" title="ver herramienta" data-bs-toggle="modal"
                                 data-bs-target="#modalAssignedTool">
                                 <i class="material-icons" style="font-size: 18px;">list</i>
+                            </button>
+                            <button class="btn btn-info btn-sm" (click)="changeStatus(asign._id)" title="Cambiar estadoi" data-bs-toggle="modal"
+                                data-bs-target="#modalAssignedTool">
+                                <i class="material-icons" style="font-size: 18px;">cached</i>
                             </button>
                         </div>
                     </td>
@@ -65,14 +71,14 @@
 
     <!-- El formulario solo se muestra si showForm es true -->
     <div *ngIf="showForm" id="formContainer">
+        <h4 class="text-primary">{{ editingAsign ? 'Editar Asignación' : 'Crear Asignación' }}</h4>
         <button class="btn btn-secondary mb-3" (click)="volverAtras()">← Volver</button>
-        <form (ngSubmit)="createAsign()" class="assignment-form">
-            <h3>Crear Asignación</h3>
 
+        <form (ngSubmit)="onSubmit()" class="assignment-form">
             <!-- Trabajador -->
             <label for="worker">Trabajador</label>
             <input type="text" class="form-control" [(ngModel)]="searchWorker" name="searchWorker"
-                placeholder="ingrese cédula o nombre" (input)="filterWorkers()" />
+                placeholder="ingrese cédula o nombre" (input)="findWorker(searchWorker)" />
 
             <select class="form-select mt-2" [(ngModel)]="selectedWorker" name="selectedWorker" required>
                 <option *ngFor="let worker of filteredWorkers" [ngValue]="worker">
@@ -83,7 +89,7 @@
             <!-- Herramienta -->
             <label for="tool" class="mt-3">Herramienta</label>
             <input type="text" class="form-control" [(ngModel)]="searchTool" name="searchTool"
-                placeholder="ingreso código, serial o nombre" (input)="filterTools()" />
+                placeholder="ingreso código, serial o nombre" (input)="findTool(searchTool)" />
 
             <select class="form-select mt-2" [(ngModel)]="selectedTool" name="selectedTool" required>
                 <option *ngFor="let tool of filteredTools" [ngValue]="tool">
@@ -102,11 +108,13 @@
             <!-- Estado -->
             <label for="status" class="mt-3">Estado</label>
             <select class="form-select" [(ngModel)]="asignForm.status" name="status" required>
-                <option value=true>Activa</option>
-                <option value=false>Finalizada</option>
+                <option [value]="true">Activa</option>
+                <option [value]="false">Finalizada</option>
             </select>
 
-            <button type="submit" class="btn btn-primary mt-3">Crear Asignación</button>
+            <button type="submit" class="btn btn-primary mt-3">
+                {{ editingAsign ? 'Guardar Cambios' : 'Crear Asignación' }}
+            </button>
         </form>
     </div>
 

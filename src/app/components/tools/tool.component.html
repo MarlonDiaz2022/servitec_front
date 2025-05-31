@@ -1,126 +1,143 @@
-<div class="row" style="min-height: 100vh; overflow-y: auto;">
-  <div class="col-md-4 d-flex align-items-center justify-content-center"
-    style="background: linear-gradient(135deg, #3498db, #2980b9); border-top-right-radius: 20px; border-bottom-right-radius: 20px;">
-    <div *ngIf="selectedTool && !showForm" class="text-center mt-4">
-      <h5>{{ selectedTool.name }}</h5>
-      <img [src]="'http://localhost:3000' + selectedTool.imageUrl"
-        style="max-width: 300px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-    </div>
-    <div *ngIf="showForm" class="text-center text-white">
-      <h5>{{ editingTool ? 'Editar Herramienta' : 'Crear Nueva Herramienta' }}</h5>
-    </div>
-    <div *ngIf="!selectedTool && !showForm" class="text-center text-white">
-      <h5>Herramientas</h5>
-    </div>
-  </div>
+<div class="row justify-content-center">
+<div *ngIf="!selectedTool && !showForm" class="text-center text-white mb-4">
+</div>
   <!-- esta seccion corresponde a la tabla de herramientas -->
 
-  <div class="col-md-8 p-4">
-    <div *ngIf="!showForm">
-      <h2>Lista de Herramientas Activas</h2>
-      <button class="btn btn-success mb-3" (click)="addNewTool()">
-        <i class="material-icons">add</i> crear Herramienta
+  <div class="container-fluid vh-100 d-flex flex-column">
+    <div *ngIf="!showForm" class="row flex-grow-1 overflow-auto">
+   <div class="card shadow rounded p-4 bg-light">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">Lista de Herramientas Activas</h4>
+    <button class="btn btn-success" (click)="addNewTool()">
+      <i class="material-icons me-1">add</i> Crear Herramienta
+    </button>
+  </div>
+
+  <!-- esta seccion corresponde a la tabla de -->
+  <div class="row g-2 mb-3">
+    <div class="col-md"><input class="form-control" placeholder="Nombre" [(ngModel)]="filterName" (input)="applyFilters()"></div>
+    <div class="col-md"><input class="form-control" placeholder="Modelo" [(ngModel)]="filterModel" (input)="applyFilters()"></div>
+    <div class="col-md"><input class="form-control" placeholder="Código" [(ngModel)]="filterCode" (input)="applyFilters()"></div>
+    <div class="col-md"><input type="number" class="form-control" placeholder="Cantidad" [(ngModel)]="filterAmount" (input)="applyFilters()"></div>
+    <div class="col-md">
+      <select class="form-select" [(ngModel)]="filterEstado" (change)="applyFilters()">
+        <option value="">Todos</option>
+        <option value="true">Buen estado</option>
+        <option value="false">Inactivo</option>
+      </select>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-outline-secondary" (click)="resetFilters()" title="Restablecer">
+        <i class="material-icons">refresh</i>
       </button>
-      <table class="table table-striped ">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Modelo</th>
-            <th>Código</th>
-            <th>Cantidad</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let tool of toolservice.toolArray">
-            <td>{{ tool.name }}</td>
-            <td>{{ tool.model }}</td>
-            <td>{{ tool.code }}</td>
-            <td>{{ tool.amount }}</td>
-            <td>{{ tool.operating ? 'Buen estado' : 'Inactivo' }}</td>
-            <td>
-              <button type="button" class="btn btn-info btn-sm mr-2" data-bs-toggle="modal"
-                data-bs-target="#modalToolDetails" (click)="detailstool(tool)" title="ver detalles">
-                <i class="material-icons" style="font-size:20px;">details</i></button>
-
-              <button class="btn btn-warning btn-sm mr-2" (click)="editTool(tool)" title="editar herramienta"><i
-                  class="material-icons" style="font-size:20px;">edit</i> </button>
-              <button class="btn btn-danger btn-sm" (click)="goMaintenance(tool.id)" title="mantenimiento"><i
-                  class="material-icons" style="font-size:20px;">build</i></button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>Nombre</th>
+          <th>Modelo</th>
+          <th>Código</th>
+          <th>Cantidad</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tool of filteredTools">
+          <td>{{ tool.name }}</td>
+          <td>{{ tool.model }}</td>
+          <td>{{ tool.code }}</td>
+          <td>{{ tool.amount }}</td>
+          <td>
+            <span [ngClass]="tool.operating ? 'text-success fw-bold' : 'text-danger fw-bold'">
+              {{ tool.operating ? 'Buen estado' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-info btn-sm me-1" title="Detalles" data-bs-toggle="modal" data-bs-target="#modalToolDetails" (click)="detailstool(tool)">
+              <i class="material-icons">details</i>
+            </button>
+            <button class="btn btn-warning btn-sm me-1" title="Editar" (click)="editTool(tool)">
+              <i class="material-icons">edit</i>
+            </button>
+            <button class="btn btn-danger btn-sm" title="Mantenimiento" (click)="goMaintenance(tool)">
+              <i class="material-icons">build</i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
     <!--esta parte es el formulario tanto para crear y editar-->
-    <div *ngIf="showForm">
-      <h2>{{ editingTool ? 'Editar Herramienta' : 'Crear Nueva Herramienta' }}</h2>
-      <form (ngSubmit)="saveTool()">
-        <div class="form-group mb-3"> <label for="formId">ID</label>
-          <input type="text" class="form-control" id="formId" name="id" [value]="toolForm.id" disabled>
-        </div>
+    <div *ngIf="showForm" class="card shadow p-4 bg-white">
+  <h4 class="text-primary">{{ editingTool ? 'Editar Herramienta' : 'Nueva Herramienta' }}</h4>
+<div>
+  <button class="btn btn-outline-secondary mb-3" (click)="volverAtras()">
+    <i class="material-icons me-1">arrow_back</i> Volver
+  </button>
+</div>
 
-        <div class="form-group mb-3">
-          <label for="formName">Nombre</label>
-          <input type="text" class="form-control" id="formName" name="name" required [(ngModel)]="toolForm.name">
-        </div>
-
-        <div class="form-group mb-3">
-          <label for="formModel">Marca</label>
-          <input type="text" class="form-control" id="formBrand" name="brand" required [(ngModel)]="toolForm.brand">
-        </div>
-
-        <div class="form-group mb-3">
-          <label for="formModel">Modelo</label>
-          <input type="text" class="form-control" id="formModel" name="model" required [(ngModel)]="toolForm.model">
-        </div>
-
-        <div class="form-group mb-3">
-          <label for="formCode">Código</label>
-          <input type="text" class="form-control" id="formCode" name="code" [(ngModel)]="toolForm.code">
-        </div>
-
-        <div class="form-group mb-3">
-          <label for="formSerial">Serial</label>
-          <input type="text" class="form-control" id="formSerial" name="serial" [(ngModel)]="toolForm.serial">
-        </div>
-
-        <div class="form-group mb-3">
-          <label for="formAmount">Cantidad</label>
-          <input type="number" class="form-control" id="formAmount" name="amount" required min="0"
-            [(ngModel)]="toolForm.amount">
-        </div>
-
-        <div class="form-group mb-3">
-          <label for="formImageUrl">Imagen</label>
-          <input type="file" class="form-control" id="formImageUrl" name="imageUrl" (change)="onFileSelected($event)">
-          <div *ngIf="editingTool && toolForm.imageUrl" class="mt-2">
-            <img [src]="'http://localhost:3000' + toolForm.imagenUrl" style="max-height: 100px; border-radius: 5px;">
-          </div>
-        </div>
-
-        <div class="form-group form-check mb-3">
-          <input type="checkbox" class="form-check-input" id="formOperating" name="operating"
-            [(ngModel)]="toolForm.operating">
-          <label class="form-check-label" for="formOperating">buen estado</label>
-        </div>
-
-        <div class="form-group form-check mb-3">
-          <input type="checkbox" class="form-check-input" id="formMaintenance" name="maintenance"
-            [(ngModel)]="toolForm.maintenance">
-          <label class="form-check-label" for="formMaintenance">En Mantenimiento</label>
-        </div>
-
-        <button type="submit" class="btn btn-primary mt-3">
-          <i class="material-icons">save</i> {{ editingTool ? 'Guardar Cambios' : 'Crear Herramienta' }}
-        </button>
-
-        <button type="button" class="btn btn-secondary mt-3 ms-2" (click)="cancelForm()">
-          <i class="material-icons">cancel</i> Cancelar
-        </button>
-      </form>
+  <form (ngSubmit)="saveTool()" class="row g-3">
+    <div class="col-md-6">
+      <label class="form-label" for="formId">ID</label>
+      <input class="form-control" id="formId" name="id" [value]="toolForm.id" disabled>
     </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="formName">Nombre</label>
+      <input class="form-control" id="formName" name="name" [(ngModel)]="toolForm.name" required>
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="formBrand">Marca</label>
+      <input class="form-control" id="formBrand" name="brand" [(ngModel)]="toolForm.brand" required>
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="formModel">Modelo</label>
+      <input class="form-control" id="formModel" name="model" [(ngModel)]="toolForm.model" required>
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="formCode">Código</label>
+      <input class="form-control" id="formCode" name="code" [(ngModel)]="toolForm.code">
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="formSerial">Serial</label>
+      <input class="form-control" id="formSerial" name="serial" [(ngModel)]="toolForm.serial">
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="formAmount">Cantidad</label>
+      <input type="number" class="form-control" id="formAmount" name="amount" [(ngModel)]="toolForm.amount" required min="0">
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="formImageUrl">Imagen</label>
+      <input type="file" class="form-control" id="formImageUrl" name="imageUrl" (change)="onFileSelected($event)">
+      <div *ngIf="editingTool && toolForm.imageUrl" class="mt-2">
+        <img [src]="'http://localhost:3000' + toolForm.imageUrl" style="max-height: 100px; border-radius: 5px;">
+      </div>
+    </div>
+    <div class="col-12 mt-3">
+      <button type="submit" class="btn btn-primary me-2">
+        <i class="material-icons me-1">save</i> {{ editingTool ? 'Guardar Cambios' : 'Crear Herramienta' }}
+      </button>
+
+      <button type="button" class="btn btn-secondary" (click)="cancelForm()">
+        <i class="material-icons me-1">cancel</i> Cancelar
+      </button>
+    </div>
+  </form>
+</div>
+
     <!--este es el cuadro de dialogo donde toda la infode la herramienta se muestra-->
     <div class="modal fade" id="modalToolDetails" tabindex="-1" aria-labelledby="modalToolDetailsLabel"
       aria-hidden="true">

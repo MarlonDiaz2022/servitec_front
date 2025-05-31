@@ -1,0 +1,27 @@
+<div class="worker-profile">
+  <h2>Perfil del Trabajador</h2>
+
+  <div *ngIf="workerData">
+    <p><strong>Nombre:</strong> {{ workerData.name }}</p>
+    <p><strong>Cédula:</strong> {{ workerData.cedula }}</p>
+    <p><strong>Teléfono:</strong> {{ workerData.phone }}</p>
+     <p><strong>Rol:</strong> {{ workerData.role }}</p>
+  </div>
+
+  <hr>
+
+  <h3>Herramientas Asignadas</h3>
+  <div *ngIf="assignedTools.length > 0; else noTools">
+    <ul>
+      <li *ngFor="let tool of assignedTools">
+        <strong>{{ tool.tool.name }}</strong> - {{ tool.tool.code }}
+        <span *ngIf="tool.status == true" class="status-active">🟢 Activa</span>
+        <span *ngIf="tool.status !== false" class="status-inactive">🔴 Inactiva</span>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #noTools>
+    <p>No tienes herramientas asignadas.</p>
+  </ng-template>
+</div>

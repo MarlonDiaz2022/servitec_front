@@ -26,30 +26,25 @@ export class assignmentService {
   // Método para cargar las herramientas de la API y almacenarlas en arreglotool
   
   fetchAsign(): void {
-    this.getmaintenances().subscribe(
-      (maintenances) => {
-        this.assignmentArray = maintenances;
-        console.log("asignaciones cargadas", maintenances)
-      },
-      (err) => console.error('Error al cargar herramientas:', err)
+  this.http.get<assignmentInterface[]>(this.url_api).subscribe((data) => {
+    this.assignmentArray = data.sort((a, b) =>
+      new Date(b.date_of_loan).getTime() - new Date(a.date_of_loan).getTime()
     );
-  }
+  });
+}
   
-
-  // --- Nuevos métodos para interactuar con la API (CRUD) ---
-
-  // Método para crear una nueva herramienta
-  // Espera un objeto FormData, que es necesario para enviar archivos (como la imagen)
 
  createasign(data: any): Observable<any> {
   return this.http.post(`${this.url_api}`, data);
 }
 
-  // Método para actualizar una herramienta existente
-  // Espera el ID de la herramienta y un objeto FormData con los datos actualizados
-
+ 
  updateasign(id: string, data: any): Observable<assignmentInterface> {
   return this.http.put<assignmentInterface>(`${this.url_api}/${id}`, data);
+}
+
+ changeStatus(id: string): Observable<assignmentInterface> {
+  return this.http.put<assignmentInterface>(`${this.url_api}/change/${id}`,{}).pipe() 
 }
 
   // Método para eliminar una herramienta

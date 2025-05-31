@@ -1,0 +1,60 @@
+.btn-back {
+    background-color: transparent; /* Fondo transparente */
+    color: var(--text-medium); /* Color del texto gris medio */
+    border: 1px solid var(--border-light); /* Borde sutil */
+    padding: 0.75rem 1.2rem; /* Relleno generoso */
+    border-radius: var(--border-radius-md); /* Bordes redondeados */
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease; /* Transición suave para hover y active */
+    display: inline-flex; /* Permite alinear el icono y el texto */
+    align-items: center; /* Centra verticalmente icono y texto */
+    gap: 0.5rem; /* Espacio entre el icono y el texto */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra muy sutil */
+    margin-bottom: 1.5rem; /* Margen inferior, ajusta según necesites */
+}
+
+.btn-back:hover {
+    background-color: var(--bg-light); /* Fondo ligeramente gris en hover */
+    border-color: var(--primary-color); /* Borde azul en hover */
+    color: var(--primary-color); /* Texto azul en hover */
+    transform: translateY(-1px); /* Efecto de levantamiento */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra un poco más fuerte en hover */
+}
+
+.btn-back:active {
+    transform: translateY(0); /* Efecto de presionado */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    background-color: var(--medium-gray); /* Fondo gris al hacer click */
+}
+
+/* Estilo para el icono dentro del botón de volver */
+.btn-back i.material-icons {
+    font-size: 1.2rem; /* Tamaño del icono */
+    line-height: 1; /* Asegura que el icono no añada espacio extra */
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.fullscreen-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #fcfcfc; /* Fondo oscuro si deseas */
+}
+
+.table-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-responsive {
+  flex-grow: 1;
+  overflow-y: auto;
+}

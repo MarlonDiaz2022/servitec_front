@@ -3,8 +3,9 @@
 import { toolInterface } from "./tools"; 
 
 export interface maintenanceInterface {
-  maintenancescode: string; 
+  _id: string;
   toolID: toolInterface; 
   comment: string; 
+  status: boolean
   createdAt:Date;
 }

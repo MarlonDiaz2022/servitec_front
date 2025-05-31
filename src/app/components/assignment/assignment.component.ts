@@ -26,6 +26,8 @@ export class assignmentComponent implements OnInit {
   filteredWorkers: any[] = [];
   filteredTools: any[] = [];
 
+  editingAsign: boolean = false;
+
   searchWorker: string = '';
   searchTool: string = '';
 
@@ -44,22 +46,22 @@ export class assignmentComponent implements OnInit {
     this.toolsService.fetchtools();
   }
 
-  filterWorkers() {
-    const search = this.searchWorker.toLowerCase();
-    this.filteredWorkers = this.workers.filter(
+  findWorker(searchTerm: string): usersInterface | undefined {
+    const cleanSearch = searchTerm.trim().toLowerCase();
+    return this.workerService.usersArray.find(
       (worker) =>
-        worker.name.toLowerCase().includes(search) ||
-        worker.cedula.toString().includes(search),
+        worker.cedula?.includes(cleanSearch) ||
+        worker.name.toLowerCase().includes(cleanSearch),
     );
   }
 
-  filterTools() {
-    const search = this.searchTool.toLowerCase();
-    this.filteredTools = this.tools.filter(
+  findTool(searchTerm: string): toolInterface | undefined {
+    const cleanSearch = searchTerm.trim().toLowerCase();
+    return this.toolsService.toolArray.find(
       (tool) =>
-        tool.name.toLowerCase().includes(search) ||
-        tool.code.toLowerCase().includes(search) ||
-        tool.serial?.toLowerCase().includes(search),
+        tool.code?.toLowerCase().includes(cleanSearch) ||
+        tool.serial?.toLowerCase().includes(cleanSearch) ||
+        tool.name?.toLowerCase().includes(cleanSearch),
     );
   }
 
@@ -85,48 +87,82 @@ export class assignmentComponent implements OnInit {
     this.showForm = false;
   }
 
-  createAsign(): void {
+ onSubmit(): void {
+  const finalWorker = this.selectedWorker;
+  const finalTool = this.selectedTool;
 
-    const tool: toolInterface = {_id: this.searchTool};
+  if (!finalWorker || !finalTool) {
+    alert('Debes seleccionar un trabajador y una herramienta válidos.');
+    return;
+  }
 
-    debugger;
-    let finalWorker: usersInterface | null = this.selectedWorker ? this.selectedWorker : this.searchWorker // Asume que el usuario seleccionó del dropdown
-    let finalTool: toolInterface | null = this.selectedTool ? this.selectedTool : tool; // Asume que el usuario seleccionó del dropdown
+  const payload = {
+    workerId: finalWorker._id,
+    toolId: finalTool._id,
+    place: this.asignForm.place,
+    date_of_loan: this.asignForm.date_of_loan,
+    delivery_date: this.asignForm.delivery_date,
+    status: this.asignForm.status,
+  };
 
-
-
-    console.log('selectedWorker:', finalTool, finalWorker);
-
-    if (!finalWorker || !finalTool) {
-      alert(
-        'Debes ingresar o seleccionar un trabajador y una herramienta válidos.',
-      );
-      return;
-    }
-
-    const payload = {
-      workerId: finalWorker,
-      toolId: finalTool._id,
-      place: this.asignForm.place,
-      date_of_loan: this.asignForm.date_of_loan,
-      delivery_date: this.asignForm.delivery_date,
-      status: this.asignForm.status,
-    };
-debugger;
-
-    this.asignservice.createasign(payload).subscribe({
-      next: (res) => {
-        alert('Asignación creada con éxito');
-        this.asignservice.fetchAsign();
+  if (this.editingAsign && this.selectedAsign && this.selectedAsign._id) {
+    // Modo edición
+    this.asignservice.updateasign(this.selectedAsign._id, payload).subscribe({
+      next: () => {
+        alert('Asignación actualizada con éxito');
         this.resetForm();
+        this.asignservice.fetchAsign();
+      },
+      error: (err) => {
+        console.error('Error al actualizar:', err);
+        alert('Error al actualizar la asignación');
+      },
+    });
+  } else {
+    // Modo creación
+    this.asignservice.createasign(payload).subscribe({
+      next: () => {
+        alert('Asignación creada con éxito');
+        this.resetForm();
+        this.asignservice.fetchAsign();
       },
       error: (err) => {
         console.error('Error al crear asignación:', err);
-        console.log('info', payload);
-        alert('Error al crear la asignación. Revisa la consola.');
+        alert('Error al crear la asignación');
       },
     });
   }
+}
+
+editAsign(asign: any): void {
+  this.editingAsign = true;
+  this.showForm = true;
+  this.selectedAsign = asign;
+
+  // Rellenar formulario
+  this.asignForm = {
+    place: asign.place,
+    date_of_loan: asign.date_of_loan?.substring(0, 10), 
+    delivery_date: asign.delivery_date?.substring(0, 10),
+    status: asign.status,
+  };
+
+  // Buscar worker y tool por ID
+  this.selectedWorker = this.workerService.usersArray.find(w => w._id === asign.worker?._id || asign.worker);
+  this.selectedTool = this.toolsService.toolArray.find(t => t._id === asign.tool?._id || asign.tool);
+
+  // Filtrados por defecto
+  this.filteredWorkers = this.workerService.usersArray;
+  this.filteredTools = this.toolsService.toolArray;
+
+  // Scroll al formulario
+  setTimeout(() => {
+    const formEl = document.getElementById('formContainer');
+    if (formEl) {
+      formEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, 0);
+}
 
   resetForm() {
     this.asignForm = {
@@ -144,19 +180,7 @@ debugger;
     this.filteredTools = this.tools;
 
     this.selectedAsign = null;
-  }
-
-  editAsign(user: any): void {
-    this.editingAsing = true;
-    this.asignForm = {
-      _id: user._id,
-      name: user.name,
-      cedula: user.cedula,
-      phone: user.phone,
-    };
-
-    this.showForm = true;
-    this.selectedAsign = null;
+    this.showForm = false;
   }
 
   // Cancela la operación del formulario
@@ -165,47 +189,24 @@ debugger;
     this.asignForm = {};
   }
 
-  saveAsign(): void {
-    console.log('Datos del formulario a enviar:', this.asignForm);
-
-    const formData = new FormData();
-
-    for (const key in this.asignForm) {
-      if (this.asignForm.hasOwnProperty(key)) {
-        if (key === 'operating' || key === 'maintenance') {
-          formData.append(key, this.asignForm[key] ? 'true' : 'false');
-        } else {
-          formData.append(key, this.asignForm[key]);
-        }
-      }
-    }
-
-    let saveOperation;
-    if (this.editingAsing) {
-      if (this.editingAsing) {
-        saveOperation = this.asignservice.updateasign(
-          this.asignForm._id,
-          this.asignForm,
-        ); // usa _id aquí
-      } else {
-        saveOperation = this.asignservice.createasign(this.asignForm);
-      }
-    } else {
-      saveOperation = this.asignservice.createasign(this.asignForm);
-    }
-
-    saveOperation.subscribe(
-      (response: any) => {
-        console.log('Herramienta guardada con éxito', response);
-        this.showForm = false;
-        this.asignForm = {};
+  changeStatus(asignId: string): void {
+   this.asignservice.changeStatus(asignId).subscribe({
+      next: (res) => {
+        alert('Estado de mantenimiento cambiado exitosamente');
         this.asignservice.fetchAsign();
       },
-      (error: any) => {
-        console.error('Error al guardar herramienta', error);
-        // Puedes mostrar un mensaje de error al usuario aquí
-        alert('Error al guardar : ' + (error.error?.message || error.message));
+      error: (err) => {
+        console.error('Error al cambiar estado del mantenimiento:', err);
+        // Mostrar un mensaje de error más específico si el backend lo envía
+        const errorMessage = err.error?.message
+          ? Array.isArray(err.error.message)
+            ? err.error.message.join(', ')
+            : err.error.message
+          : 'Error desconocido. Verifica la consola.';
+        alert('No se pudo cambiar el estado: ' + errorMessage);
       },
-    );
+    });
   }
+
+ 
 }

@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, RouterModule } from '@angular/router'; 
-import { Route } from '@angular/router'; 
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
-import { ToolComponent } from './components/tools/tool.component';
-import { MaintenanceComponent } from './components/Maintenances/maintenance.component';
+
+
 
 
 @Component({

@@ -22,6 +22,10 @@ export class UsersService {
     return this.http.get<usersInterface[]>(this.url_api);
   }
 
+  getuserById(cedula: string): Observable<usersInterface> {
+    return this.http.get<usersInterface>(`${this.url_api}/${cedula}`);
+  }
+
   fetchUsers(): any[] {
     this.getusers().subscribe(
       (users) => {

@@ -98,4 +98,20 @@
             color: #555;
             font-weight: bold;
         }
+        .status-active {
+            background-color: var(--accent-color) !important; /* Prueba con !important */
+            color: green !important; /* Prueba con !important */
+            padding: 0.3em 0.6em; /* Manten estos para que se vea como un "tag" */
+            border-radius: var(--border-radius-sm);
+            font-weight: bold; /* O 500 si prefieres el de Bootstrap */
+            display: inline-block; /* Para que padding y border-radius se apliquen bien */
+        }
+        .status-inactive {
+            background-color: var(--danger-color) !important; /* Prueba con !important */
+            color: red !important; /* Prueba con !important */
+            padding: 0.3em 0.6em;
+            border-radius: var(--border-radius-sm);
+            font-weight: bold;
+            display: inline-block;
+        }
     

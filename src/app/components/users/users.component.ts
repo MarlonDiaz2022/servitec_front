@@ -19,13 +19,17 @@ export class UsersComponent implements OnInit {
   toolsOfUser: any[] = [];
   modalTool: any = null;
 
+
+  filterName: string = '';
+  filtercedula: string = '';
+  filteredUsers: any[] = [];
+
   constructor(public usersService: UsersService) {}
 
   ngOnInit(): void {
     this.usersService.fetchUsers();
   }
 
-  // ... (otros métodos como details, goMaintenance, deleteTool) ...
 
   detailstool(user: any) {
     console.log('detailstool llamado con herramienta:', user);
@@ -141,4 +145,25 @@ export class UsersComponent implements OnInit {
       }
     }, 200); // Espera más tiempo si necesitas asegurar el render
   }
+
+  applyFilters(): void {
+    this.filteredUsers = this.usersService.usersArray.filter(users => {
+      const nameMatch = !this.filterName || 
+        users.name.toLowerCase().includes(this.filterName.toLowerCase());
+      const cedulaMatch = !this.filtercedula || 
+        users.cedula?.toLowerCase().includes(this.filtercedula.toLowerCase());
+    
+      
+      return nameMatch && cedulaMatch;
+    });
+  }
+
+  // Método para resetear los filtros
+  resetFilters(): void {
+    this.filterName = '';
+    this.filtercedula = '';
+    this.applyFilters();
+  }
+
+
 }

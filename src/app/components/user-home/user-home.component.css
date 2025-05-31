@@ -1,0 +1,18 @@
+.worker-profile {
+  max-width: 600px;
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+.status-active {
+  color: green;
+  margin-left: 10px;
+}
+
+.status-inactive {
+  color: red;
+  margin-left: 10px;
+}

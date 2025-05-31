@@ -19,6 +19,13 @@ export class ToolComponent implements OnInit {
 
   selectedTool: any = null;
 
+  filterName: string = '';
+  filterModel: string = '';
+  filterCode: string = '';
+  filterAmount: number | null = null;
+  filterEstado: string = '';
+  filteredTools: any[] = [];
+
   constructor(public toolservice: ToolService) {}
 
   ngOnInit(): void {
@@ -26,6 +33,10 @@ export class ToolComponent implements OnInit {
   }
 
   // ... (otros métodos como details, goMaintenance, deleteTool) ...
+
+volverAtras() {
+    this.showForm = false;
+  }
 
   detailstool(tool: any) {
     console.log('detailstool llamado con herramienta:', tool);
@@ -151,21 +162,35 @@ export class ToolComponent implements OnInit {
     );
   }
 
-  goMaintenance(id: string): void {
-    this.toolservice.deleteTool(id).subscribe(
-      (response) => {
-        console.log('Herramienta eliminada', response);
-        this.toolservice.fetchtools();
-        this.selectedTool = null;
-        this.showForm = false;
-      },
-      (error) => {
-        console.error('Error al eliminar herramienta', error);
-        alert(
-          'Error al eliminar herramienta: ' +
-            (error.error?.message || error.message),
-        );
-      },
-    );
+  goMaintenance(tool : any): void {
+    console.log('goMaintenance llamado con herramienta:', tool);
+    this.selectedTool = tool;
+     }
+
+  applyFilters(): void {
+    this.filteredTools = this.toolservice.toolArray.filter(tool => {
+      const nameMatch = !this.filterName || 
+        tool.name?.toLowerCase().includes(this.filterName.toLowerCase());
+      const modelMatch = !this.filterModel || 
+        tool.model?.toLowerCase().includes(this.filterModel.toLowerCase());
+      const codeMatch = !this.filterCode || 
+        (tool.code && tool.code.toLowerCase().includes(this.filterCode.toLowerCase()));
+      const amountMatch = !this.filterAmount || 
+        tool.amount === this.filterAmount;
+      const estadoMatch = !this.filterEstado || 
+        tool.operating === (this.filterEstado === 'true');
+
+      return nameMatch && modelMatch && codeMatch && amountMatch && estadoMatch;
+    });
+  }
+
+  // Método para resetear los filtros
+  resetFilters(): void {
+    this.filterName = '';
+    this.filterModel = '';
+    this.filterCode = '';
+    this.filterAmount = null;
+    this.filterEstado = '';
+    this.applyFilters();
   }
 }
