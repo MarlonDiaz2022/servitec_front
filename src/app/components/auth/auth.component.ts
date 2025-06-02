@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
   selector: 'app-login',
   imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './auth.component.html',
+  styleUrl: './auth.component.css',
 })
 export class LoginComponent {
   cedula: string = '';
@@ -22,26 +23,21 @@ export class LoginComponent {
 
   login() {
     this.authService.login(this.cedula, this.password).subscribe({
-      next: (res) => {
-        console.log(res);
-        alert('Login exitoso');
+  next: (res) => {
+    const role = res.user?._doc.role;
+    localStorage.setItem('userRole', role);
+    this.authService.etUserRole(role);
 
-        const role = res.user?._doc.role;
-
-        const cedula = res.user?._doc.cedula;
-
-        if (cedula) {
-          localStorage.setItem('workerCedula', cedula);
+        if (this.cedula) {
+          localStorage.setItem('workerCedula', this.cedula);
         } else {
           alert('No se encontró la cédula');
         }
 
         if (role === 'ADMIN') {
-          this.router.navigate(['/tools']);
+          this.router.navigate(['/adminprofile']);
         } else if (role === 'WORKER') {
           this.router.navigate(['/profile']);
-        } else {
-          this.router.navigate(['/']);
         }
       },
       error: (err) => {
@@ -50,4 +46,6 @@ export class LoginComponent {
       },
     });
   }
+
+  
 }

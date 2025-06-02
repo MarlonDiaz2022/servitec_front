@@ -1,0 +1,53 @@
+<div class="worker-profile-container">
+
+  <div class="profile-card">
+    <button class="btn btn-outline-secondary mb-3" (click)="backTologin()">
+      <i class="material-icons me-1">arrow_back</i> Volver
+    </button>
+
+    <h2 class="card-title">
+      <i class="fas fa-user-circle profile-icon"></i> Perfil del Trabajador
+    </h2>
+
+    <div class="profile-details" *ngIf="workerData">
+      <p class="detail-item"><strong>Nombre:</strong> {{ workerData.name }}</p>
+      <p class="detail-item"><strong>Cédula:</strong> {{ workerData.cedula }}</p>
+      <p class="detail-item"><strong>Teléfono:</strong> {{ workerData.phone }}</p>
+      <p class="detail-item"><strong>Rol:</strong> {{ workerData.role }}</p>
+    </div>
+
+    <hr class="card-divider">
+
+    <h3 class="card-subtitle">
+      <i class="fas fa-tools tools-icon"></i> Herramientas Asignadas
+    </h3>
+    <div *ngIf="assignedTools.length > 0; else noTools" class="tools-list-container">
+      <ul class="tools-list">
+        <li *ngFor="let tool of assignedTools" class="tool-item">
+          <div class="tool-main-info">
+            <div class="tool-info">
+              <span class="tool-name">{{ tool.tool.name }}</span>
+              <span class="tool-code">({{ tool.tool.code }})</span>
+            </div>
+            <div class="tool-actions-and-status">
+              <div class="tool-status">
+                <h3>estado de la asignacion :</h3>
+                <span [ngClass]="tool.status ? 'status-active' : 'status-inactive'">
+                  {{ tool.status ? 'Activo' : 'Inactivo' }}
+                </span>
+              </div>
+              <div *ngIf="tool.tool.imageUrl" class="tool-image-wrapper">
+                <img [src]="'http://localhost:3000'+tool.tool.imageUrl" alt="Imagen de {{ tool.tool.name }}"
+                  class="tool-image">
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <ng-template #noTools>
+      <p class="no-tools-message">No tienes herramientas asignadas.</p>
+    </ng-template>
+  </div>
+</div>

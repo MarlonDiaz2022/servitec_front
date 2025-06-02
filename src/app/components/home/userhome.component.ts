@@ -11,8 +11,8 @@ import { HttpClientModule } from '@angular/common/http';
 @Component({
   selector: 'app-worker-profile',
   imports: [CommonModule, FormsModule, HttpClientModule],
-  templateUrl: './user-home.component.html',
-  styleUrls: ['./user-home.component.css']
+  templateUrl: './userhome.component.html',
+  styleUrls: ['./userhome.component.css']
 })
 export class WorkerProfile implements OnInit {
 
@@ -64,4 +64,10 @@ export class WorkerProfile implements OnInit {
       (err) => console.error('Error al cargar herramientas:', err)
     );
   }
+
+  backTologin(): void {
+    window.location.href = '/login'; 
+  }
+
+
 }

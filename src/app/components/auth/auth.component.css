@@ -1,0 +1,178 @@
+/* Variables de color (asegúrate de que estas estén definidas globalmente o en :host) */
+:host {
+  --primary-blue: hsl(210, 80%, 40%);
+  --light-blue: hsl(210, 60%, 95%);
+  --dark-text: hsl(210, 10%, 20%);
+  --medium-text: hsl(210, 10%, 50%);
+  --success-green: hsl(120, 60%, 40%);
+  --danger-red: hsl(0, 70%, 50%);
+  --border-color: hsl(210, 20%, 85%);
+  --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada para el login */
+  --border-radius: 8px;
+  --input-border-radius: 5px;
+}
+
+.login-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centra verticalmente */
+  min-height: 100vh; /* Ocupa toda la altura de la vista */
+  background-color: var(--light-blue); /* Fondo suave */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.login-card {
+  background-color: #ffffff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 40px;
+  max-width: 450px; /* Ancho máximo del formulario */
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center; /* Centra el título y el botón */
+}
+
+.login-title {
+  color: var(--primary-blue);
+  font-size: 2em;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra el título y el icono */
+  gap: 10px; /* Espacio entre el icono y el texto */
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 15px;
+}
+
+.login-icon {
+  color: var(--medium-text);
+  font-size: 1.2em;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espacio entre los grupos de formulario */
+}
+
+.form-group {
+  text-align: left; /* Alinea el label a la izquierda */
+}
+
+.form-label {
+  display: block; /* Para que el label ocupe toda la línea */
+  margin-bottom: 8px;
+  color: var(--dark-text);
+  font-weight: bold;
+  font-size: 0.95em;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--input-border-radius);
+  font-size: 1em;
+  color: var(--dark-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box; /* Importante para que el padding no afecte el ancho */
+}
+
+.form-input::placeholder {
+  color: var(--medium-text);
+  opacity: 0.7;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px hsla(210, 80%, 40%, 0.2); /* Sombra suave al enfocar */
+}
+
+.message-container {
+  padding: 12px 20px;
+  border-radius: var(--border-radius);
+  font-size: 0.95em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: -10px; /* Reduce el espacio con el input anterior */
+}
+
+.error-message {
+  background-color: hsla(0, 70%, 50%, 0.1); /* Fondo rojo suave */
+  color: var(--danger-red);
+  border: 1px solid var(--danger-red);
+}
+
+.message-icon {
+  font-size: 1.1em;
+}
+
+.submit-button {
+  background-color: var(--primary-blue);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--input-border-radius);
+  padding: 15px 25px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px; /* Espacio después de los campos/mensajes */
+}
+
+.submit-button:hover {
+  background-color: hsl(210, 80%, 30%); /* Azul un poco más oscuro al pasar el ratón */
+  transform: translateY(-2px); /* Efecto de "levantamiento" */
+}
+
+.submit-button:active {
+  transform: translateY(0); /* Vuelve a su posición original al hacer click */
+}
+
+.button-icon {
+  font-size: 1em;
+}
+
+.form-links {
+  margin-top: 25px;
+  font-size: 0.9em;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-links a {
+  color: var(--primary-blue);
+  text-decoration: none;
+  transition: text-decoration 0.2s ease;
+}
+
+.form-links a:hover {
+  text-decoration: underline;
+}
+
+/* Responsividad básica */
+@media (max-width: 500px) {
+  .login-card {
+    padding: 30px 20px;
+    margin: 15px; /* Margen en pantallas muy pequeñas */
+  }
+  .login-title {
+    font-size: 1.8em;
+  }
+  .form-input,
+  .submit-button {
+    padding: 10px 15px;
+    font-size: 1em;
+  }
+  .message-container {
+    padding: 10px 15px;
+  }
+}

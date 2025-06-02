@@ -1,0 +1,58 @@
+/* Estilo general del navbar */
+.app-navbar {
+  background-color: #004b8d; /* O el color que desees */
+  color: #fff;
+  padding: 0.5rem 1rem;
+}
+
+.app-navbar .navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Elimina cualquier posible verticalidad en los elementos del navbar */
+.app-navbar .navbar-nav {
+  display: flex;
+  flex-direction: row; /* Asegura que los elementos estén en línea */
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Asegura que los items del navbar no tengan márgenes verticales innecesarios */
+.app-navbar .navbar-nav .nav-item {
+  margin-right: 1rem; /* Espacio horizontal entre los elementos */
+}
+
+.app-navbar .navbar-nav .nav-item:last-child {
+  margin-right: 0; /* No margen a la derecha para el último elemento */
+}
+
+/* Estilo de los enlaces */
+.app-navbar .nav-link {
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.app-navbar .nav-link:hover {
+  text-decoration: underline;
+}
+
+/* Estilo específico para el botón de cerrar sesión */
+.app-navbar .logout-button {
+  background-color: #dc3545;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+}
+
+.app-navbar .logout-button:hover {
+  background-color: #c82333;
+}

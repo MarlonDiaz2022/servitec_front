@@ -41,8 +41,7 @@ export class ToolService {
     return this.http.post<toolInterface>(this.url_api, formData).pipe(
       
       tap((newTool) => {
-        console.log('Herramienta creada en el backend:', newTool);
-      
+       alert('Herramienta creada )en el backend: ' + newTool.name);
         this.fetchtools();
       })
     );

@@ -1,36 +1,36 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" routerLink="/">Servitec</a>
+<nav class="app-navbar" *ngIf="isAdmin()">
+  <div class="navbar-container" style="display: flex; justify-content: space-between; align-items: center;">
+    <a class="navbar-brand" routerLink="/adminprofile">Servitec</a>
+    <ul class="navbar-nav" style="display: flex; list-style: none; margin: 0; padding: 0;">
+      <li class="nav-item" style="margin-right: 1rem;">
 
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/tools" routerLinkActive="active">Herramientas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/maintenances" routerLinkActive="active">Mantenimientos</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/assignments" routerLinkActive="active">Asignaciones</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/users" routerLinkActive="active">Usuarios</a>
-        </li>
-      </ul>
-    </div>
+        <a class="nav-link" routerLink="/tools" routerLinkActive="active">
+          <i class="fas fa-wrench nav-icon"></i> Herramientas
+        </a>
+      </li>
+      <li class="nav-item" style="margin-right: 1rem;">
+        <a class="nav-link" routerLink="/maintenances" routerLinkActive="active">
+          <i class="fas fa-tools nav-icon"></i> Mantenimientos
+        </a>
+      </li>
+      <li class="nav-item" style="margin-right: 1rem;">
+        <a class="nav-link" routerLink="/assignments" routerLinkActive="active">
+          <i class="fas fa-boxes nav-icon"></i> Asignaciones
+        </a>
+      </li>
+      <li class="nav-item" style="margin-right: 1rem;">
+        <a class="nav-link" routerLink="/users" routerLinkActive="active">
+          <i class="fas fa-users nav-icon"></i> Usuarios
+        </a>
+      </li>
+      <li class="nav-item logout-item">
+        <button class="nav-link logout-button" (click)="logout()">
+          <i class="fas fa-sign-out-alt nav-icon"></i> Cerrar Sesión
+        </button>
+      </li>
+    </ul>
   </div>
 </nav>
 
-  <router-outlet></router-outlet>
+
+<router-outlet></router-outlet>

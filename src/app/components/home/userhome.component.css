@@ -1,0 +1,236 @@
+/* Definición de variables de color para fácil mantenimiento */
+:host {
+  --primary-blue: hsl(210, 80%, 40%);
+  --light-blue: hsl(210, 60%, 95%);
+  --dark-text: hsl(210, 10%, 20%);
+  --medium-text: hsl(210, 10%, 50%);
+  --success-green: hsl(120, 60%, 40%);
+  --danger-red: hsl(0, 70%, 50%);
+  --border-color: hsl(210, 20%, 85%);
+  --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  --border-radius: 8px;
+}
+
+h3{
+font: 1em sans-serif;
+  color: black;
+  margin-bottom: 10px;
+  text-align: center;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+
+}
+
+.worker-profile-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--light-blue); /* Fondo suave */
+  min-height: 100vh; /* Ocupa al menos toda la altura de la vista */
+  align-items: flex-start; /* Alinea arriba si el contenido es corto */
+}
+
+.profile-card {
+  background-color: #ffffff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 30px;
+  max-width: 700px; /* Ancho máximo para legibilidad */
+  width: 100%;
+  box-sizing: border-box; /* Incluye padding y border en el ancho */
+  margin-bottom: 20px; /* Espacio si hay más contenido debajo */
+}
+
+.card-title,
+.card-subtitle {
+  color: var(--primary-blue);
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+.card-subtitle {
+  font-size: 1.5em;
+  margin-top: 30px;
+}
+
+.profile-icon,
+.tools-icon {
+  margin-right: 10px;
+  color: var(--medium-text); /* Color de iconos */
+  font-size: 1.2em;
+}
+
+.profile-details {
+  margin-bottom: 20px;
+}
+
+.detail-item {
+  font-size: 1.1em;
+  color: var(--dark-text);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.detail-item strong {
+  color: var(--primary-blue);
+  min-width: 100px; /* Asegura alineación si los labels son de largo similar */
+  display: inline-block;
+}
+
+.card-divider {
+  border: 0;
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 30px 0;
+}
+
+.tools-list-container {
+  background-color: var(--light-blue);
+  border-radius: var(--border-radius);
+  padding: 15px;
+  max-height: 400px; /* Limita la altura y añade scroll si hay muchas herramientas */
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+}
+
+.tools-list {
+  list-style: none; /* Eliminar viñetas predeterminadas */
+  padding: 0;
+  margin: 0;
+}
+
+.tool-item {
+  display: flex;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  margin-bottom: 10px;
+  padding: 15px 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative; /* Para posicionar la imagen */
+}
+
+.tool-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--card-shadow);
+}
+
+.tool-info {
+  flex-grow: 1; /* Ocupa el espacio restante */
+  margin-right: 15px;
+  font-size: 1.05em;
+  color: var(--dark-text);
+}
+
+.tool-name {
+  font-weight: bold;
+  color: var(--primary-blue);
+  margin-right: 5px;
+}
+
+.tool-code {
+  color: var(--medium-text);
+  font-size: 0.9em;
+}
+
+.tool-serial {
+  color: var(--medium-text);
+  font-size: 0.9em;
+}
+
+.tool-status {
+  margin-left: auto; /* Empuja el estado a la derecha */
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 0.9em;
+  text-transform: uppercase;
+}
+
+.status-active {
+  background-color: hsla(120, 60%, 40%, 0.1); /* Verde suave de fondo */
+  color: var(--success-green);
+}
+
+.status-inactive {
+  background-color: hsla(0, 70%, 50%, 0.1); /* Rojo suave de fondo */
+  color: var(--danger-red);
+}
+
+.tool-image-wrapper {
+  position: absolute;
+  top: 10px; /* Ajusta la posición de la imagen */
+  right: 10px;
+  width: 50px; /* Tamaño de la imagen */
+  height: 50px;
+  border-radius: 50%; /* Para hacerla circular */
+  overflow: hidden;
+  border: 2px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tool-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-tools-message {
+  color: var(--medium-text);
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--light-blue);
+}
+
+/* Responsividad básica */
+@media (max-width: 768px) {
+  .profile-card {
+    padding: 20px;
+  }
+  .card-title,
+  .card-subtitle {
+    font-size: 1.5em;
+  }
+  .detail-item,
+  .tool-info {
+    font-size: 1em;
+  }
+  .tool-item {
+    flex-direction: column; /* Apila elementos en pantallas pequeñas */
+    align-items: flex-start;
+    padding-right: 20px; /* Deja espacio si la imagen sigue a la derecha */
+  }
+  .tool-status {
+    margin-left: 0; /* Deshabilita el margen auto */
+    margin-top: 10px; /* Espacio superior */
+  }
+  .tool-image-wrapper {
+    position: static; /* Vuelve a posición normal */
+    margin-top: 10px; /* Espacio después de info */
+    width: 60px;
+    height: 60px;
+    align-self: flex-end; /* Alinea a la derecha si es posible */
+  }
+}
+
+@media (max-width: 480px) {
+  .card-title,
+  .card-subtitle {
+    font-size: 1.3em;
+  }
+  .detail-item strong {
+    display: block; /* Para que los labels ocupen su propia línea */
+    margin-bottom: 5px;
+  }
+}

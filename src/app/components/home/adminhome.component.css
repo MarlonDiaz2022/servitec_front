@@ -1,0 +1,173 @@
+/* Definición de variables de color (igual que en worker-profile.component.css) */
+:host {
+  --primary-blue: hsl(210, 80%, 40%);
+  --light-blue: hsl(210, 60%, 95%);
+  --dark-text: hsl(210, 10%, 20%);
+  --medium-text: hsl(210, 10%, 50%);
+  --success-green: hsl(120, 60%, 40%);
+  --danger-red: hsl(0, 70%, 50%);
+  --border-color: hsl(210, 20%, 85%);
+  --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Sombra suave para tarjetas */
+  --card-shadow-strong: 0 8px 16px rgba(0, 0, 0, 0.1); /* Sombra más fuerte para la tarjeta principal */
+  --border-radius: 8px;
+  --button-padding: 12px 25px; /* Padding base para botones */
+  --button-font-size: 1.1em;
+}
+
+/* Contenedor principal para el dashboard */
+.admin-dashboard-container {
+  display: flex;
+  flex-direction: column; /* Apila secciones verticalmente */
+  align-items: center; /* Centra horizontalmente el contenido */
+  background-color: var(--light-blue); /* Fondo suave */
+  min-height: 100vh; /* Ocupa al menos toda la altura de la vista */
+  padding-bottom: 50px; /* Espacio para el footer si es parte del layout */
+}
+
+/* Hero Section */
+.admin-hero-section {
+  background: url('/assets/img/fondo.png') no-repeat center center/cover; /* Asegúrate de que esta ruta sea correcta en tu Angular App */
+  width: 100%; /* Ocupa todo el ancho */
+  height: 300px; /* Altura fija para el banner */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.8); /* Sombra de texto más pronunciada */
+  margin-bottom: -70px; /* Superpone un poco la tarjeta sobre el hero */
+  position: relative; /* Para que margin-bottom negativo funcione bien */
+  z-index: 1; /* Asegura que esté detrás de la tarjeta */
+}
+
+.hero-title {
+  font-size: 3.5rem; /* Tamaño de fuente grande */
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Tarjeta de Bienvenida / Panel de Control */
+.admin-card {
+  background-color: #ffffff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow-strong); /* Sombra más fuerte como en el login */
+  padding: 40px;
+  max-width: 800px; /* Ancho máximo para la tarjeta */
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center; /* Centra el texto y los botones */
+  z-index: 2; /* Asegura que esté por encima del hero */
+}
+
+.card-title {
+  color: var(--primary-blue);
+  font-size: 2em;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra el título y el icono */
+  gap: 10px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 15px;
+}
+
+.card-icon {
+  color: var(--medium-text);
+  font-size: 1.2em;
+}
+
+.card-text {
+  font-size: 1.1em;
+  color: var(--dark-text);
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+/* Contenedor de Botones de Acción */
+.action-buttons-container {
+  display: flex;
+  flex-wrap: wrap; /* Permite que los botones se envuelvan */
+  justify-content: center;
+  gap: 20px; /* Espacio entre los botones */
+  margin-top: 20px;
+}
+
+.custom-button {
+  background-color: var(--primary-blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius); /* Bordes redondeados como las tarjetas */
+  padding: var(--button-padding);
+  font-size: var(--button-font-size);
+  font-weight: bold;
+  text-decoration: none; /* Quitar subrayado del enlace */
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex; /* Para alinear icono y texto */
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Espacio entre icono y texto */
+  min-width: 180px; /* Ancho mínimo para los botones */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave para los botones */
+}
+
+.custom-button:hover {
+  background-color: hsl(210, 80%, 30%); /* Azul un poco más oscuro */
+  transform: translateY(-3px); /* Efecto de "levantamiento" */
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2); /* Sombra al pasar el ratón */
+}
+
+.custom-button:active {
+  transform: translateY(0); /* Vuelve a su posición original al hacer click */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra original */
+}
+
+.button-icon {
+  font-size: 1em;
+}
+
+/* Footer (si lo incluyes en este componente) */
+.app-footer {
+  background-color: var(--navbar-bg); /* O un color oscuro similar */
+  color: var(--navbar-link-color);
+  padding: 20px;
+  text-align: center;
+  width: 100%;
+  margin-top: auto; /* Empuja el footer al final si el contenedor es flex-column */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+/* --- Responsividad --- */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  .admin-card {
+    padding: 30px 20px;
+  }
+  .card-title {
+    font-size: 1.8em;
+  }
+  .card-text {
+    font-size: 1em;
+  }
+  .action-buttons-container {
+    flex-direction: column; /* Apila los botones en columnas */
+    align-items: center;
+  }
+  .custom-button {
+    width: 90%; /* Los botones ocupan más ancho en móviles */
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  .admin-card {
+    padding: 25px 15px;
+  }
+  .card-title {
+    font-size: 1.5em;
+  }
+}
