@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -19,14 +20,13 @@ export class AppComponent {
   constructor(private authService: AuthService) {
     this.authService.userRole$.subscribe((role) => {
       this.role = role;
+      console.log('User role updated:', this.role);
     });
   }
 
   isAdmin(): boolean {
     return this.role === 'ADMIN';
   }
-
-
 
   logout(): void {
     this.authService.logout();

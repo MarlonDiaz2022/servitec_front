@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 
+
 @Component({
   selector: 'app-worker-profile',
   imports: [CommonModule, FormsModule, HttpClientModule],
@@ -23,7 +24,7 @@ export class adminProfile implements OnInit {
   workerCedula: string = ''; // Ajusta según cómo tengas autenticación
 
   constructor(
-  ) {}
+) {}
 
   ngOnInit(): void {}
  

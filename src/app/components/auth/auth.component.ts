@@ -27,6 +27,7 @@ export class LoginComponent {
     const role = res.user?._doc.role;
     localStorage.setItem('userRole', role);
     this.authService.etUserRole(role);
+    alert('Inicio de sesión exitoso');
 
         if (this.cedula) {
           localStorage.setItem('workerCedula', this.cedula);
@@ -42,7 +43,7 @@ export class LoginComponent {
       },
       error: (err) => {
         console.error(err);
-        this.errorMessage = err.error.message || 'Error desconocido';
+        alert('Error al iniciar sesión: ' + (err.error.message || 'Error desconocido'));
       },
     });
   }

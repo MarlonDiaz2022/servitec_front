@@ -65,7 +65,7 @@ volverAtras() {
   // Inicia el proceso para editar una herramienta existente
   editTool(tool: any): void {
     this.editingTool = true;
-    this.toolForm = { id: tool.id || tool._id, ...tool };
+    this.toolForm = { id: tool._id, ...tool };
     this.selectedFile = null;
     this.showForm = true;
     this.selectedTool = null;
@@ -96,12 +96,7 @@ volverAtras() {
     console.log('Archivo a subir:', this.selectedFile);
 
     const formData = new FormData();
-
     for (const key in this.toolForm) {
-      // No añadimos 'imageUrl' del objeto toolForm aquí porque el archivo se maneja aparte
-      // A menos que estemos editando y NO se seleccione un nuevo archivo, en cuyo caso
-      // el backend necesita saber la URL existente. La forma de manejar esto depende del backend.
-      // Una opción común es enviar la 'imageUrl' existente si no hay 'selectedFile'.
       if (this.toolForm.hasOwnProperty(key) && key !== 'imageUrl') {
         if (key === 'operating' || key === 'maintenance') {
           formData.append(key, this.toolForm[key] ? 'true' : 'false');
@@ -114,30 +109,19 @@ volverAtras() {
       formData.append('imageUrl', this.selectedFile, this.selectedFile.name);
       console.log("Adjuntando archivo con nombre de campo 'imageUrl'");
     } else if (this.editingTool && this.toolForm.imageUrl) {
-      // Si estamos editando y no se subió un nuevo archivo, pero la herramienta ya tiene una imagen,
-      // podrías enviar la URL existente para que el backend sepa que no debe eliminarla.
-      // Esto depende de cómo tu backend maneje las actualizaciones de imagen sin nuevo archivo.
-      // Si el backend simplemente ignora el campo de archivo si no está presente, esta parte no es necesaria.
-      // Si necesitas enviar la URL existente, descomenta la siguiente línea:
-      // formData.append('imageUrl', this.toolForm.imageUrl); // Asegúrate que tu backend lo espere así
       console.log(
         'No se seleccionó nuevo archivo, usando URL existente (si aplica)',
       );
     } else if (this.editingTool && !this.toolForm.imageUrl) {
-      // Si estamos editando y la herramienta no tenía imagen y no se subió una nueva,
-      // quizás necesites enviar algo para indicar que no hay imagen (ej: un string vacío o null)
-      // dependiendo de cómo tu backend maneje este caso. O simplemente no envíes el campo 'imageUrl'.
       console.log('No se seleccionó nuevo archivo, y no había URL existente.');
     } else {
-      // Creando y no se seleccionó archivo
-      // Si crear herramienta sin imagen es válido, no añadas el campo 'imageUrl' a FormData.
       console.log('Creando sin archivo de imagen.');
     }
 
     let saveOperation;
     if (this.editingTool) {
-      // Asegúrate de que tu API soporta PUT/PATCH a /tools/:id con FormData
       saveOperation = this.toolservice.updateTool(this.toolForm.id, formData);
+      console.log("Actualizando", this.toolForm.id, "con datos:", this.toolForm.name);
     } else {
       // Asegúrate de que tu API soporta POST a /tools con FormData
       saveOperation = this.toolservice.createTool(formData);
@@ -149,7 +133,8 @@ volverAtras() {
         this.showForm = false;
         this.toolForm = {};
         this.selectedFile = null;
-        this.toolservice.fetchtools(); // Refresca la lista
+        this.toolservice.fetchtools();
+        this.applyFilters(); // Refresca la lista
       },
       (error: any) => {
         console.error('Error al guardar herramienta', error);

@@ -44,6 +44,7 @@ export class UsersComponent implements OnInit {
       cedula: '',
       phone: '',
       password: '',
+      role: '', // Asigna un valor por defecto para el rol
     };
     this.showForm = true;
     this.selecteduser = null;
@@ -57,6 +58,7 @@ export class UsersComponent implements OnInit {
       name: user.name,
       cedula: user.cedula,
       phone: user.phone,
+      role: user.role, // Asegúrate de que el campo se llama 'role'
     };
 
     this.showForm = true;
@@ -131,6 +133,7 @@ export class UsersComponent implements OnInit {
       },
     });
   }
+
   openModal(user: any): void {
     this.selecteduser = user;
     this.golist(user); // carga herramientas

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // 👈 importar CommonModule
+import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { assignmentService } from '../../Services/assignment.service';
@@ -26,6 +26,7 @@ export class assignmentComponent implements OnInit {
   filteredWorkers: any[] = [];
   filteredTools: any[] = [];
 
+  assignedToolsOfWorker: any[] = [];
   editingAsign: boolean = false;
 
   searchWorker: string = '';
@@ -43,27 +44,47 @@ export class assignmentComponent implements OnInit {
   ngOnInit(): void {
     this.asignservice.fetchAsign();
     this.workerService.fetchUsers();
+    this.filteredWorkers = this.workerService.usersArray;
     this.toolsService.fetchtools();
+    this.filteredTools = this.toolsService.toolArray;
   }
 
-  findWorker(searchTerm: string): usersInterface | undefined {
-    const cleanSearch = searchTerm.trim().toLowerCase();
-    return this.workerService.usersArray.find(
-      (worker) =>
-        worker.cedula?.includes(cleanSearch) ||
-        worker.name.toLowerCase().includes(cleanSearch),
-    );
+findWorker(searchTerm: string): void {
+  const cleanSearch = searchTerm.trim().toLowerCase();
+  if (!cleanSearch) {
+    this.filteredWorkers = this.workerService.usersArray;
+    return;
   }
+  this.filteredWorkers = this.workerService.usersArray.filter(
+    (worker) =>
+      worker.cedula?.toLowerCase().includes(cleanSearch) ||
+      worker.name?.toLowerCase().includes(cleanSearch)
+  );
+  // Seleccionar automáticamente si hay una sola coincidencia
+  if (this.filteredWorkers.length === 1) {
+    this.selectedWorker = this.filteredWorkers[0];
+  }
+}
 
-  findTool(searchTerm: string): toolInterface | undefined {
-    const cleanSearch = searchTerm.trim().toLowerCase();
-    return this.toolsService.toolArray.find(
-      (tool) =>
-        tool.code?.toLowerCase().includes(cleanSearch) ||
-        tool.serial?.toLowerCase().includes(cleanSearch) ||
-        tool.name?.toLowerCase().includes(cleanSearch),
-    );
+findTool(searchTerm: string): void {
+  const cleanSearch = searchTerm.trim().toLowerCase();
+  if (!cleanSearch) {
+    this.filteredTools = this.toolsService.toolArray;
+    return;
   }
+  this.filteredTools = this.toolsService.toolArray.filter(
+    (tool) =>
+      tool.name?.toLowerCase().includes(cleanSearch) ||
+      tool.code?.toLowerCase().includes(cleanSearch) ||
+      tool.serial?.toLowerCase().includes(cleanSearch)
+  );
+  // Seleccionar automáticamente si hay una sola coincidencia
+  if (this.filteredTools.length === 1) {
+    this.selectedTool= this.filteredTools[0];
+  }
+}
+
+
 
   detailstool(tool: any) {
     console.log('detailstool llamado con herramienta:', tool);
@@ -71,17 +92,17 @@ export class assignmentComponent implements OnInit {
   }
 
   mostrarFormulario() {
-    this.filteredTools = this.toolsService.fetchtools();
-    this.filteredWorkers = this.workerService.fetchUsers();
+  this.filteredWorkers = this.workerService.usersArray;
+  this.filteredTools = this.toolsService.toolArray;
+  this.showForm = true;
 
-    this.showForm = true;
-    setTimeout(() => {
-      const formEl = document.getElementById('formContainer');
-      if (formEl) {
-        formEl.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 0);
-  }
+  setTimeout(() => {
+    const formEl = document.getElementById('formContainer');
+    if (formEl) {
+      formEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, 0);
+}
 
   volverAtras() {
     this.showForm = false;
@@ -90,6 +111,9 @@ export class assignmentComponent implements OnInit {
  onSubmit(): void {
   const finalWorker = this.selectedWorker;
   const finalTool = this.selectedTool;
+
+ console.log('Final Worker:', finalWorker);
+ console.log('Final Tool:', finalTool);
 
   if (!finalWorker || !finalTool) {
     alert('Debes seleccionar un trabajador y una herramienta válidos.');
@@ -208,5 +232,6 @@ editAsign(asign: any): void {
     });
   }
 
+ 
  
 }

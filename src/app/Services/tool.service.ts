@@ -50,22 +50,22 @@ export class ToolService {
   // Método para actualizar una herramienta existente
   // Espera el ID de la herramienta y un objeto FormData con los datos actualizados
 
-  updateTool(id: string, formData: FormData): Observable<toolInterface> {
-   
-    return this.http.put<toolInterface>(`${this.url_api}/${id}`, formData).pipe(
+updateTool(id: string, formData: FormData): Observable<toolInterface> {
+  return this.http.put<toolInterface>(`${this.url_api}/${id}`, formData).pipe(
+    tap((updatedTool) => {
+      console.log('Herramienta actualizada:', updatedTool);
       
-      tap((updatedTool) => {
-        console.log('Herramienta actualizada en el backend:', updatedTool);
-       
-        const index = this.toolArray.findIndex(tool => tool.id === updatedTool.id);
-        if (index !== -1) {
-          this.toolArray[index] = updatedTool;
-        }
-        // O, más seguro para consistencia, refrescar toda la lista:
-        // this.fetchtools();
-      })
-    );
-  }
+      // Actualizar el array local
+      const index = this.toolArray.findIndex(t => t._id === id);
+      if (index !== -1) {
+        // Mantener los valores existentes y actualizar con los nuevos
+        this.toolArray[index] = { ...this.toolArray[index], ...updatedTool };
+      }
+      // Forzar actualización de la vista
+      this.toolArray = [...this.toolArray];
+    })
+  );
+}
 
   // Método para eliminar una herramienta
   deleteTool(id: string): Observable<any> {
@@ -82,21 +82,12 @@ export class ToolService {
     );
   }
 
-  // --- Métodos existentes (revisados) ---
-
-  // Este método busca una herramienta DENTRO del array local 'arreglotool'
-  // No hace una llamada a la API. Es útil si ya tienes la lista cargada.
-  // Nota: Si la lista local no está actualizada, este método puede fallar.
+  
   getToolByIdLocal(id: string): toolInterface | undefined {
     // Renombrado para aclarar que es una búsqueda local
     console.log(`Buscando herramienta con ID ${id} en cache local.`);
     return this.toolArray.find(tool => tool.id === id);
   }
 
-  // El método edittoolByid era redundante con getToolByIdLocal. Lo eliminamos.
-  // La lógica de "editar" ahora está en el componente (cargando datos al formulario).
-
-
-  // El método deleteTool existente también buscaba solo localmente. Ha sido reemplazado
-  // por el nuevo método deleteTool que interactúa con la API.
+  
 }

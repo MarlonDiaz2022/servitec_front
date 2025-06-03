@@ -54,10 +54,6 @@
                             <button class="btn btn-warning btn-sm" (click)=editAsign(asign) title="editar asignacion">
                                 <i class="material-icons" style="font-size: 18px;">edit</i>
                             </button>
-                            <button class="btn btn-info btn-sm" title="ver herramienta" data-bs-toggle="modal"
-                                data-bs-target="#modalAssignedTool">
-                                <i class="material-icons" style="font-size: 18px;">list</i>
-                            </button>
                             <button class="btn btn-info btn-sm" (click)="changeStatus(asign._id)" title="Cambiar estadoi" data-bs-toggle="modal"
                                 data-bs-target="#modalAssignedTool">
                                 <i class="material-icons" style="font-size: 18px;">cached</i>
@@ -93,7 +89,7 @@
 
             <select class="form-select mt-2" [(ngModel)]="selectedTool" name="selectedTool" required>
                 <option *ngFor="let tool of filteredTools" [ngValue]="tool">
-                    {{ tool.name }} - {{ tool.code }}
+                    {{ tool.name }} - {{ tool.code }} - {{ tool.serial }}
                 </option>
             </select>
 
@@ -117,6 +113,7 @@
             </button>
         </form>
     </div>
+
 
 </body>
 
