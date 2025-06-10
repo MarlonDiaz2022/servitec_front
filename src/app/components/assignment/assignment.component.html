@@ -23,6 +23,27 @@
 
         </div>
 
+ <div class="row g-2 mb-3">
+    <div class="col-md"><input class="form-control" placeholder="Trabajador" [(ngModel)]="filterNameW" (input)="applyFilters()"></div>
+    <div class="col-md"><input class="form-control" placeholder="nombre de herramienta" [(ngModel)]="filterNameT" (input)="applyFilters()"></div>
+    <div class="col-md"><input class="form-control" placeholder="Código de herramienta " [(ngModel)]="filterCodeT" (input)="applyFilters()"></div>
+     <div class="col-md">
+      <select class="form-select" [(ngModel)]="filterEstado" (change)="applyFilters()">
+        <option value="">Todos</option>
+        <option value="true">Buen estado</option>
+        <option value="false">Inactivo</option>
+      </select>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-outline-secondary" (click)="resetFilters()" title="Restablecer">
+        <i class="material-icons">refresh</i>
+      </button>
+    </div>
+    </div>
+  
+
+
+
         <table>
             <thead>
                 <tr>
@@ -37,7 +58,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let asign of asignservice.assignmentArray">
+                <tr *ngFor="let asign of filteredAsign">
                     <td>{{ asign.worker.name }}</td>
                     <td>{{ asign.tool.name }}</td>
                     <td>{{ asign.tool.code }}</td>

@@ -6,6 +6,7 @@ import { assignmentInterface } from '../../models/assignment';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 
 
@@ -23,9 +24,12 @@ export class adminProfile implements OnInit {
   // Puedes obtener el ID del usuario del localStorage o de un servicio de autenticación
   workerCedula: string = ''; // Ajusta según cómo tengas autenticación
 
-  constructor(
-) {}
+  constructor(private router: Router) { }
 
+  navigateTo(route: string): void {
+    console.log('Navigating to:', route);
+    this.router.navigate([route]);
+  }
   ngOnInit(): void {}
  
 
@@ -33,5 +37,8 @@ export class adminProfile implements OnInit {
     window.location.href = '/login'; 
   }
 
+  isActive(route: string): boolean {
+    return this.router.url.includes(route);
+  }
 
 }

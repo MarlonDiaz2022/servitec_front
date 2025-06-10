@@ -19,24 +19,8 @@
   display: flex;
   flex-direction: column; /* Apila secciones verticalmente */
   align-items: center; /* Centra horizontalmente el contenido */
-  background-color: var(--light-blue); /* Fondo suave */
-  min-height: 100vh; /* Ocupa al menos toda la altura de la vista */
+  background-color: #187bd1; /* Fondo suave */
   padding-bottom: 50px; /* Espacio para el footer si es parte del layout */
-}
-
-/* Hero Section */
-.admin-hero-section {
-  background: url('/assets/img/fondo.png') no-repeat center center/cover; /* Asegúrate de que esta ruta sea correcta en tu Angular App */
-  width: 100%; /* Ocupa todo el ancho */
-  height: 300px; /* Altura fija para el banner */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.8); /* Sombra de texto más pronunciada */
-  margin-bottom: -70px; /* Superpone un poco la tarjeta sobre el hero */
-  position: relative; /* Para que margin-bottom negativo funcione bien */
-  z-index: 1; /* Asegura que esté detrás de la tarjeta */
 }
 
 .hero-title {
@@ -57,6 +41,69 @@
   text-align: center; /* Centra el texto y los botones */
   z-index: 2; /* Asegura que esté por encima del hero */
 }
+
+
+/* Hero Section */
+.admin-hero-section {
+  background: url(/assets/images/9703773.jpg) no-repeat center center/cover; /* Asegúrate de que esta ruta sea correcta en tu Angular App */
+  width: 100%; /* Ocupa todo el ancho */
+  height: 300px; /* Altura fija para el banner */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #187bd1;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8); /* Sombra de texto más pronunciada */
+  margin-bottom: 0px; /* Superpone un poco la tarjeta sobre el hero */
+  position: relative; /* Para que margin-bottom negativo funcione bien */
+  z-index: 1; /* Asegura que esté detrás de la tarjeta */
+
+  text-shadow:
+    -1.5px -1.5px 0 white,  /* Arriba-izquierda */
+     1.5px -1.5px 0 white,  /* Arriba-derecha */
+    -1.5px  1.5px 0 white,  /* Abajo-izquierda */
+     1.5px  1.5px 0 white,  /* Abajo-derecha */
+    -1.5px 0 0 white,       /* Izquierda */
+     1.5px 0 0 white,       /* Derecha */
+     0 -1.5px 0 white,      /* Arriba */
+     0  1.5px 0 white,      /* Abajo */
+    /* También puedes añadir una sombra general para que el texto resalte más */
+    2px 2px 6px rgba(0, 0, 0, 0.8); /* Tu sombra de texto original para profundidad */
+
+}
+
+.distance {
+  background-color: white; /* Ahora este blanco será visible */
+  height: 5px; /* <--- CAMBIO IMPORTANTE: Dale una altura fija para que sea visible */
+  width: 100%; /* Asegúrate de que ocupe todo el ancho para ver el fondo */
+  /* margin-top: 500px; /* <--- ELIMINA ESTO: Ya no es necesario, la altura del div crea el espacio */
+}
+
+.target-hero-section {
+  background: #187bd1;
+  /* <!url(/assets/images/9703773.jpg) no-repeat center center/cover; /* Asegúrate de que esta ruta sea correcta en tu Angular App */
+  /* Línea inválida: No es una regla CSS válida. Usa background o background-image en su lugar si necesitas un fondo. */ 
+  width: 100%; /* Ocupa todo el ancho */
+  height: 500px; /* Altura fija para el banner */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #187bd1;
+  margin-bottom: 10px; /* Superpone un poco la tarjeta sobre el hero */
+  position: relative; /* Para que margin-bottom negativo funcione bien */
+  z-index: 1; /* Asegura que esté detrás de la tarjeta */
+
+}
+
+.app-footer {
+  background-color: white; /* O un color oscuro similar */
+  color: var(--navbar-link-color);
+  padding: 20px;
+  text-align: center;
+  width: 100%;
+  margin-top: auto; /* Empuja el footer al final si el contenedor es flex-column */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
 
 .card-title {
   color: var(--primary-blue);
@@ -104,7 +151,7 @@
   display: flex; /* Para alinear icono y texto */
   align-items: center;
   justify-content: center;
-  gap: 10px; /* Espacio entre icono y texto */
+  gap: 15px; /* Espacio entre icono y texto */
   min-width: 180px; /* Ancho mínimo para los botones */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave para los botones */
 }
@@ -121,20 +168,8 @@
 }
 
 .button-icon {
-  font-size: 1em;
+  font-size: 5em;
 }
-
-/* Footer (si lo incluyes en este componente) */
-.app-footer {
-  background-color: var(--navbar-bg); /* O un color oscuro similar */
-  color: var(--navbar-link-color);
-  padding: 20px;
-  text-align: center;
-  width: 100%;
-  margin-top: auto; /* Empuja el footer al final si el contenedor es flex-column */
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-}
-
 
 /* --- Responsividad --- */
 @media (max-width: 768px) {
@@ -170,4 +205,26 @@
   .card-title {
     font-size: 1.5em;
   }
+}
+
+.custom-button.active {
+  background-color: hsl(210, 80%, 30%); /* Color diferente para "activo" */
+  transform: translateY(-3px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+}
+
+.custom-button {
+  background-color: var(--primary-blue);
+  color: #fff;
+  border: none;
+  padding: var(--button-padding);
+  font-size: var(--button-font-size);
+  font-weight: bold;
+  text-decoration: none; /* Quitar subrayado del enlace */
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex; /* Para alinear icono y texto */
+  align-items: center;
+  justify-content: center;
+  gap: 15px; /* Espacio entre icono y texto */
+  min-width: 180px; /* Ancho mínimo para los botones */
 }

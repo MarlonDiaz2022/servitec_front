@@ -56,3 +56,59 @@
 .app-navbar .logout-button:hover {
   background-color: #c82333;
 }
+
+navbar-brand-logo {
+  display: flex; /* Permite alinear la imagen y el texto */
+  align-items: center; /* Centra verticalmente */
+  color: #fff;
+  font-size: 1.5rem; /* Tamaño del texto "Servitec" */
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.navbar-brand-logo:hover {
+  color: #e0e0e0;
+}
+
+/* NUEVO ESTILO PARA LA IMAGEN DEL LOGO */
+.brand-logo-img {
+height: 70px; 
+width: 70px;  
+border-radius: 50%; 
+object-fit: cover;
+
+}
+
+
+
+/* Mantiene el resto de tu CSS anterior para el navbar */
+.app-navbar {
+  background-color: #187bd1;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.app-navbar .navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.custom-button {
+  background-color: var(--primary-blue);
+  color: #fff;
+  border: none;
+  padding: var(--button-padding);
+  font-size: var(--button-font-size);
+  font-weight: bold;
+  text-decoration: none; /* Quitar subrayado del enlace */
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex; /* Para alinear icono y texto */
+  align-items: center;
+  justify-content: center;
+  gap: 15px; /* Espacio entre icono y texto */
+  min-width: 180px; /* Ancho mínimo para los botones */
+  
+}

@@ -1,31 +1,60 @@
 <div class="admin-dashboard-container">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
   <div class="admin-hero-section">
     <h1 class="hero-title">Bienvenido, Administrador</h1>
   </div>
 
-  <div class="admin-card">
-    <div class="card-body-content">
-      <h2 class="card-title">
-        <i class="fas fa-cogs card-icon"></i> Panel de Control
-      </h2>
-      <p class="card-text">
-        Administra las herramientas, mantenimientos, asignaciones y usuarios desde aquí.
-      </p>
-      <div class="action-buttons-container">
-        <a routerLink="/tools"  routerLinkActive="active" class="custom-button">
-          <i class="fas fa-wrench button-icon"></i> Herramientas
-        </a>
-        <a routerLink="/maintenances" class="custom-button">
-          <i class="fas fa-tools button-icon"></i> Mantenimientos
-        </a>
-        <a routerLink="/assignments" class="custom-button">
-          <i class="fas fa-boxes button-icon"></i> Asignaciones
-        </a>
-        <a routerLink="/users" class="custom-button">
-          <i class="fas fa-users button-icon"></i> Usuarios
-        </a>
+<div class="distance"></div>
+
+  <div class="target-hero-section">
+  <div class="row">
+    <div class="col-md-3 col-sm-6 mb-4">
+      <div class="card text-center h-100">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+           <i class="fas fa-wrench nav-icon button-icon"></i> <h5 class="card-title mt-3">Herramientas</h5>
+          <p class="card-text">Manejo de todas las Herramientas y sus respectivas operaciones</p>
+          <button class="btn btn-primary mt-auto" (click)="navigateTo('/tools')"> ingresar </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 mb-4">
+      <div class="card text-center h-100">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+          <i class="fas fa-tools nav-icon button-icon"></i> <h5 class="card-title mt-3">Mantenimientos</h5>
+          <p class="card-text">LLevar el control de las reparaciones de todas las Herramientas</p>
+          <button class="btn btn-primary mt-auto" (click)="navigateTo('/maintenances')"> ingresar </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 mb-4">
+      <div class="card text-center h-100">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+          <i class="fas fa-boxes nav-icon button-icon"></i> <h5 class="card-title mt-3">Asignaciones</h5>
+          <p class="card-text">LLevar el control de todos los prestamos realizados con las Herramientas</p>
+         <button class="btn btn-primary mt-auto" (click)="navigateTo('/assignments')"> ingresar </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 mb-4">
+      <div class="card text-center h-100">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+          <i class="fas fa-user nav-icon button-icon"></i> <h5 class="card-title mt-3">Trabajadores</h5>
+          <p class="card-text"> Encontraran toda la informacion de los trabajadores y sus respectivos prestamos</p>
+          <button class="btn btn-primary mt-auto" (click)="navigateTo('/users')"> ingresar </button>
+        </div>
       </div>
     </div>
   </div>
+</div>
+
+<div class="app-footer">
+  <footer class="app-footer">
+    <p>&copy; 2025 Mi Aplicación. Todos los derechos reservados.</p>
+  </footer>
+</div> 
 
   </div>

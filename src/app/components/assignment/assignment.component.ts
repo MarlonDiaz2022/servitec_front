@@ -35,6 +35,13 @@ export class assignmentComponent implements OnInit {
   selectedWorker: any = null;
   selectedTool: any = null;
 
+
+  filterNameW: string = '';
+  filterNameT: string = '';
+  filterCodeT: string = '';
+  filterEstado: string = '';
+  filteredAsign: any[] = [];
+
   constructor(
     public asignservice: assignmentService,
     private workerService: UsersService,
@@ -232,6 +239,34 @@ editAsign(asign: any): void {
     });
   }
 
+  applyFilters(): void {
+
+    if (!this.asignservice.assignmentArray || 
+        !this.workerService.usersArray || 
+        !this.toolsService.toolArray) {
+      return;
+    }
+    console.log('Aplicando filtros:', this.filteredAsign)
+    
+    this.filteredAsign = this.asignservice.assignmentArray.filter(tool => {
+      const nameWMatch = !this.filterNameW || 
+        tool.worker.name.toLowerCase().includes(this.filterNameW.toLowerCase());
+      const nameTMatch = !this.filterNameT || 
+        tool.tool.name?.toLowerCase().includes(this.filterNameT.toLowerCase());
+        const codeTMatch = !this.filterCodeT || 
+        tool.tool.code?.toLowerCase().includes(this.filterCodeT.toLowerCase());
+      const estadoMatch = !this.filterEstado || 
+        tool.status === (this.filterEstado === 'true');
+
+      return nameWMatch && nameTMatch && codeTMatch && estadoMatch;
+    });
+  }
  
- 
+  resetFilters(): void {
+    this.filterNameW = '';
+    this.filterNameT = '';
+    this.filterCodeT = '';
+    this.filterEstado = '';
+    this.applyFilters();
+  }
 }

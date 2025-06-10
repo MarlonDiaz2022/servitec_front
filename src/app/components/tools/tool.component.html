@@ -7,7 +7,7 @@
     <div *ngIf="!showForm" class="row flex-grow-1 overflow-auto">
    <div class="card shadow rounded p-4 bg-light">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="mb-0">Lista de Herramientas Activas</h4>
+    <h4 class="mb-0">Lista de Herramientas </h4>
     <button class="btn btn-success" (click)="addNewTool()">
       <i class="material-icons me-1">add</i> Crear Herramienta
     </button>
@@ -64,9 +64,8 @@
             <button class="btn btn-warning btn-sm me-1" title="Editar" (click)="editTool(tool)">
               <i class="material-icons">edit</i>
             </button>
-            <button class="btn btn-danger btn-sm" title="Mantenimiento" (click)="goMaintenance(tool)">
-              <i class="material-icons">build</i>
-            </button>
+            
+            
           </td>
         </tr>
       </tbody>
